@@ -2,21 +2,21 @@
 /**
  * Class responsible for upsell notices.
  *
- * Author:          plugin_author_name
+ * Author:          Uriahs Victor
  *
- * @link    plugin_author_url
+ * @link    https://soaringleads.com
  * @since   1.0.0
  * @package Notices
  */
 
-namespace Root\Notices;
+namespace SoaringLeads\DCashWC\Notices;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Root\Notices\Notice;
-use Root\Traits\PluginInfo;
+use SoaringLeads\DCashWC\Notices\Notice;
+use SoaringLeads\DCashWC\Traits\PluginInfo;
 
 /**
  * Class UpsellsNotices.
@@ -48,8 +48,8 @@ class UpsellsNotices extends Notice {
 		}
 
 		$content = array(
-			'title' => __( 'Try out the PRO version.', 'text-domain' ),
-			'body'  => __( 'Replace me with content.', 'text-domain' ),
+			'title' => __( 'Try out the PRO version.', 'dcash-for-woocommerce' ),
+			'body'  => __( 'Replace me with content.', 'dcash-for-woocommerce' ),
 			'link'  => '',
 		);
 

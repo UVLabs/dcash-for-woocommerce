@@ -2,14 +2,14 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author_name     Uriahs Victor <plugins@soaringleads.com>
  */
 
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class responsible for methods to do with admin enqueing of JS and CSS.
  *
- * @package Root\Bootstrap
+ * @package SoaringLeads\DCashWC\Bootstrap
  * @since 1.0.0
  */
 class AdminEnqueues {
@@ -47,8 +47,8 @@ class AdminEnqueues {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		$this->plugin_name = PREFIX_PLUGIN_NAME;
-		$this->version     = PREFIX_VERSION;
+		$this->plugin_name = DCASH_WC_PLUGIN_NAME;
+		$this->version     = DCASH_WC_VERSION;
 	}
 
 	/**
@@ -57,7 +57,7 @@ class AdminEnqueues {
 	 * @since    1.0.0
 	 */
 	public function enqueueStyles() {
-		wp_enqueue_style( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'admin/css/prefix-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'admin/css/dcash-wc-admin.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class AdminEnqueues {
 	 * @since    1.0.0
 	 */
 	public function enqueueScripts() {
-		wp_enqueue_script( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'admin/js/prefix-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'admin/js/dcash-wc-admin.js', array( 'jquery' ), $this->version, false );
 	}
 
 }

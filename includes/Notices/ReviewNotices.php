@@ -4,21 +4,21 @@
  *
  * Notices to review the plugin.
  *
- * Author:          plugin_author_name
+ * Author:          Uriahs Victor
  *
- * @link    plugin_author_url
+ * @link    https://soaringleads.com
  * @since   1.0.0
  * @package Notices
  */
 
-namespace Root\Notices;
+namespace SoaringLeads\DCashWC\Notices;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Root\Notices\Notice;
-use Root\Traits\PluginInfo;
+use SoaringLeads\DCashWC\Notices\Notice;
+use SoaringLeads\DCashWC\Traits\PluginInfo;
 
 /**
  * Class UpsellsNotices.
@@ -51,10 +51,10 @@ class ReviewNotices extends Notice {
 		}
 
 		$content = array(
-			'title' => __( 'Has my_plugin_name Helped You?', 'text-domain' ),
-			'body'  => __( 'Hey! its plugin_author_name, Sole Developer working on my_plugin_name. Has the plugin benefitted your website? If yes, then would you mind taking a few seconds to leave a kind review? Reviews go a long way and they really help keep me motivated to continue working on the plugin and making it better.', 'text-domain' ),
-			'cta'   => __( 'Sure!', 'text-domain' ),
-			'link'  => 'https://wordpress.org/support/plugin/text-domain/reviews/#new-post',
+			'title' => __( 'Has DCash for WooCommerce Helped You?', 'dcash-for-woocommerce' ),
+			'body'  => __( 'Hey! its Uriahs Victor, Sole Developer working on DCash for WooCommerce. Has the plugin benefitted your website? If yes, then would you mind taking a few seconds to leave a kind review? Reviews go a long way and they really help keep me motivated to continue working on the plugin and making it better.', 'dcash-for-woocommerce' ),
+			'cta'   => __( 'Sure!', 'dcash-for-woocommerce' ),
+			'link'  => 'https://wordpress.org/support/plugin/dcash-for-woocommerce/reviews/#new-post',
 		);
 
 		$this->createNoticeMarkup( 'leave_review_notice_1', $content );

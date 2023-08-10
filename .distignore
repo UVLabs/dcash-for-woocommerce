@@ -12,7 +12,7 @@ composer.lock
 package.json
 package-lock.json
 node_modules
-artifact
+artifact-dcash
 dist
 bin
 phpcs.xml

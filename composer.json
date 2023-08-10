@@ -11,7 +11,7 @@
     },
     "autoload":{
         "psr-4": {
-            "Root\\" : "includes/"
+            "SoaringLeads\\DCashWC\\" : "includes/"
         }
     },
     "config": {

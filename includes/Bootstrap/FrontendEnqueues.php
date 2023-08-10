@@ -2,10 +2,10 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 /**
@@ -14,10 +14,10 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Root
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author_name     Uriahs Victor <plugins@soaringleads.com>
  */
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class responsible for methods to do with frontend enqueing of JS and CSS.
  *
- * @package Root\Bootstrap
+ * @package SoaringLeads\DCashWC\Bootstrap
  * @since 1.0.0
  */
 class FrontendEnqueues {
@@ -55,8 +55,8 @@ class FrontendEnqueues {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		$this->plugin_name = PREFIX_PLUGIN_NAME;
-		$this->version     = PREFIX_VERSION;
+		$this->plugin_name = DCASH_WC_PLUGIN_NAME;
+		$this->version     = DCASH_WC_VERSION;
 	}
 
 	/**
@@ -78,7 +78,7 @@ class FrontendEnqueues {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'public/css/prefix-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/css/dcash-wc-public.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class FrontendEnqueues {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'public/js/prefix-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/dcash-wc-public.js', array( 'jquery' ), $this->version, false );
 	}
 
 }

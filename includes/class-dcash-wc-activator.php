@@ -2,10 +2,10 @@
 /**
  * Fired during plugin activation
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,9 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Root
- * @subpackage Root/includes
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author     Uriahs Victor <plugins@soaringleads.com>
  */
 class RootActivator {
 
@@ -29,7 +28,7 @@ class RootActivator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-		self::prefix_add_default_settings();
+		self::dcash_wc_add_default_settings();
 	}
 
 	/**
@@ -37,19 +36,19 @@ class RootActivator {
 	 *
 	 * @return void
 	 */
-	private static function prefix_add_default_settings() {
+	private static function dcash_wc_add_default_settings() {
 
-		$installed_at = get_option( 'prefix_installed_at_version' );
-		$install_date = get_option( 'prefix_first_install_date' );
+		$installed_at = get_option( 'dcash_wc_installed_at_version' );
+		$install_date = get_option( 'dcash_wc_first_install_date' );
 
 		// Create date timestamp when plugin was first installed.
 		if ( empty( $install_date ) ) {
-			add_option( 'prefix_first_install_date', time(), '', 'yes' );
+			add_option( 'dcash_wc_first_install_date', time(), '', 'yes' );
 		}
 
 		// Create entry for plugin first install version.
 		if ( empty( $installed_at ) ) {
-			add_option( 'prefix_installed_at_version', PREFIX_VERSION, '', false );
+			add_option( 'dcash_wc_installed_at_version', DCASH_WC_VERSION, '', false );
 		}
 
 	}

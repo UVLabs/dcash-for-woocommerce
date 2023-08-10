@@ -5,10 +5,10 @@
  * A class definition that includes attributes and functions used across both the
  * public-facing side of the site and the admin area.
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 /**
@@ -21,26 +21,26 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Root
- * @subpackage Root/includes
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author_name     Uriahs Victor <plugins@soaringleads.com>
  */
 
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Root\Bootstrap\Loader;
-use Root\Bootstrap\I18n;
-use Root\Bootstrap\AdminEnqueues;
-use Root\Bootstrap\FrontendEnqueues;
-use Root\Bootstrap\SetupCron;
+use SoaringLeads\DCashWC\Bootstrap\Loader;
+use SoaringLeads\DCashWC\Bootstrap\I18n;
+use SoaringLeads\DCashWC\Bootstrap\AdminEnqueues;
+use SoaringLeads\DCashWC\Bootstrap\FrontendEnqueues;
+use SoaringLeads\DCashWC\Bootstrap\SetupCron;
+use SoaringLeads\DCashWC\Controllers\Gateway;
 
 /*
-use Root\Notices\Loader as NoticesLoader;
-use Root\Notices\Notice;
+use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
+use SoaringLeads\DCashWC\Notices\Notice;
 */
 
 /**
@@ -56,7 +56,7 @@ class Main {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Root_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -108,9 +108,9 @@ class Main {
 	 * @since    1.0.0
 	 */
 	private function __construct() {
-		$this->version = PREFIX_VERSION;
+		$this->version = DCASH_WC_VERSION;
 
-		$this->plugin_name = PREFIX_PLUGIN_NAME;
+		$this->plugin_name = DCASH_WC_PLUGIN_NAME;
 
 		$this->loadDependencies();
 		$this->setLocale();
@@ -179,7 +179,7 @@ class Main {
 		$this->loader->add_action( 'admin_notices', $notices_loader, 'loadNotices' );
 
 		// Notices Ajax dismiss method (uncomment if making use of notice class).
-		$this->loader->add_action( 'wp_ajax_prefix_dismissNotice', $notice, 'dismissNotice' );
+		$this->loader->add_action( 'wp_ajax_dcash_wc_dismissNotice', $notice, 'dismissNotice' );
 		*/
 	}
 
