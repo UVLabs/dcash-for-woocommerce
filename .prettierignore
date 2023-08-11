@@ -1,4 +1,5 @@
 assets/admin/js/build/
 assets/public/js/build/
 assets/img/
+assets/public/js/dcash-ecommerce-debug.js
 *.php

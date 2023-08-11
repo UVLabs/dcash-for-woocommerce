@@ -36,7 +36,7 @@ use SoaringLeads\DCashWC\Bootstrap\I18n;
 use SoaringLeads\DCashWC\Bootstrap\AdminEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\FrontendEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\SetupCron;
-use SoaringLeads\DCashWC\Controllers\Gateway;
+use SoaringLeads\DCashWC\Controllers\DCashGateway;
 
 /*
 use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
@@ -116,6 +116,7 @@ class Main {
 		$this->setLocale();
 		$this->defineAdminHooks();
 		$this->definePublicHooks();
+		$this->setupGateway();
 	}
 
 	/**
@@ -143,6 +144,22 @@ class Main {
 	private function setLocale() {
 		$plugin_i18n = new I18n();
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'loadPluginTextdomain' );
+	}
+
+	/**
+	 * Setup the gateway settings and output.
+	 *
+	 * @return void
+	 * @since 1.0.0
+	 */
+	private function setupGateway() {
+		// Setup Gateway settings.
+		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-settings-api.php';
+			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-payment-gateway.php';
+			$this->loader->add_action( 'plugins_loaded', new DCashGateway(), '__construct', PHP_INT_MAX );
+			$this->loader->add_filter( 'woocommerce_payment_gateways', new DCashGateway(), 'gatewayClass', PHP_INT_MAX );
+		}
 	}
 
 	/**

@@ -13,7 +13,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       DCash for WooCommerce
- * Plugin URI: 		  https://soaringleads.com/	
+ * Plugin URI:        https://soaringleads.com/
  * Description:       Accept DCash payments on your WooCommerce store.
  * Version:           1.0.0
  * Author:            Uriahs Victor
@@ -126,4 +126,3 @@ define( 'DCASH_WC_DEBUG', $debug );
 
 $plugin_instance = \SoaringLeads\DCashWC\Bootstrap\Main::getInstance();
 $plugin_instance->run();
-
