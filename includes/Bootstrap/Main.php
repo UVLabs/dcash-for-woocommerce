@@ -161,7 +161,7 @@ class Main {
 		}
 			$this->loader->add_action( 'plugins_loaded', new DCashGateway(), '__construct', PHP_INT_MAX );
 			$this->loader->add_filter( 'woocommerce_payment_gateways', new DCashGateway(), 'gatewayClass', PHP_INT_MAX );
-		}
+	}
 
 	/**
 	 * Register all of the hooks related to the admin area functionality
