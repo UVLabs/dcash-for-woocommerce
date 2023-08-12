@@ -100,8 +100,8 @@ class FrontendEnqueues {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/dcash-wc-public.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name . '-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/dcash-ecommerce-debug.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '-debug-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/dcash-ecommerce-debug.js', array( 'jquery' ), $this->version );
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/dcash-wc-public.js', array( 'jquery', 'wp-util', "{$this->plugin_name}-debug-script" ), $this->version );
 	}
 
 }
