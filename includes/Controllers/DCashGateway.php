@@ -100,15 +100,19 @@ class DCashGateway extends \WC_Payment_Gateway {
 	 */
 	public function payment_fields() {
 
-		$total   = WC()->cart->get_cart_contents_total();
+		$total   = (float) WC()->cart->get_total( 'raw' );
 		$api_key = $this->get_option( 'api_key' );
-
+		esc_html_e( 'Pay with DCash' );
 		?>
-			<div id='dcash-button' />
+			<div id='sl-dcash-container'>
+			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/img/dcash-logo.png'; ?>"><div id="sl-dcash-btn-content">Pay with DCash</div></a>
+			<div id='dcash-button' style='display: none'/>
+			</div>
 			<!-- Move this script to own file -->
 			<script>
 				function show_dcash_button() {
-					const paymentID = Math.floor(Math.random() * 10000)
+					const paymentID = 2475
+					// const paymentID = Math.floor(Math.random() * 10000)
 					console.log(paymentID);
 					let paymentParams = {
 						merchant_name: 'SoaringLeads',
@@ -138,6 +142,40 @@ class DCashGateway extends \WC_Payment_Gateway {
 				show_dcash_button(); // To show the DCash button
 			</script>
 		<?php
+	}
+
+	/**
+	 * Process the payment.
+	 *
+	 * @param int $order_id
+	 * @return array
+	 * @since 1.0.0
+	 */
+	public function process_payment( $order_id ) {
+		global $woocommerce;
+		$order = new \WC_Order( $order_id );
+
+		// ray($_POST);
+
+		// This always returns true but we can maybe find a better way to process the payment by using a callback
+		// https://woocommerce.com/document/payment-gateway-api/#section-7
+		$dcash_success = true;
+
+		if ( $dcash_success ) {
+			$order->payment_complete();
+		} else {
+			wc_add_notice( __( 'Payment error:', 'woothemes' ) . ' Something went wrong', 'error' );
+			return;
+		}
+
+		// Empty cart
+		$woocommerce->cart->empty_cart();
+
+		// Return thankyou redirect
+		return array(
+			'result'   => 'success',
+			'redirect' => $this->get_return_url( $order ),
+		);
 	}
 }
 

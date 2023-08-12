@@ -37,6 +37,7 @@ use SoaringLeads\DCashWC\Bootstrap\AdminEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\FrontendEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\SetupCron;
 use SoaringLeads\DCashWC\Controllers\DCashGateway;
+use SoaringLeads\DCashWC\Controllers\Frontend\Checkout as FrontendCheckout;
 
 /*
 use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
@@ -157,10 +158,10 @@ class Main {
 		if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
 			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-settings-api.php';
 			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-payment-gateway.php';
+		}
 			$this->loader->add_action( 'plugins_loaded', new DCashGateway(), '__construct', PHP_INT_MAX );
 			$this->loader->add_filter( 'woocommerce_payment_gateways', new DCashGateway(), 'gatewayClass', PHP_INT_MAX );
 		}
-	}
 
 	/**
 	 * Register all of the hooks related to the admin area functionality
@@ -209,14 +210,17 @@ class Main {
 	 */
 	private function definePublicHooks() {
 
-		if ( is_admin() ) {
+		if ( is_admin() && ! wp_doing_ajax() ) {
 			return;
 		}
 
-		$plugin_public = new FrontendEnqueues();
+		$plugin_public            = new FrontendEnqueues();
+		$checkout_page_controller = new FrontendCheckout();
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueStyles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueScripts' );
+
+		$this->loader->add_filter( 'woocommerce_order_button_html', $checkout_page_controller, 'filterPlaceOrderBtn' );
 	}
 
 	/**
