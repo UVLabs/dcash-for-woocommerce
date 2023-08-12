@@ -30,6 +30,20 @@
    */
 
   /**
+   * Handle when a customer switches between different shipping methods.
+   */
+  function handleShippingMethodChanged() {
+    $(document.body).on("updated_checkout", function () {
+      const oldDCashBtn = moveDCashBtn();
+      const newDCashBtn = document.querySelector("#sl-dcash-btn");
+      const placeOrderDiv = document.querySelector("#order_review");
+      placeOrderDiv.replaceChild(newDCashBtn, oldDCashBtn); // So we don't have multiple buttons on page.
+
+      handlePaymentOptionChange(); // Add event listeners back since the DOM refreshes.
+    });
+  }
+
+  /**
    * Handle when a customer switches payment methods.
    */
   function handlePaymentOptionChange() {
@@ -42,7 +56,6 @@
         const id = e.target.id;
         const dCashBtn = document.querySelector("#sl-dcash-btn");
         const placeOrderBtn = document.querySelector("#place_order");
-
         if (id === "payment_method_sl_dcash_gateway") {
           dCashBtn.style.display = "flex";
           placeOrderBtn.classList.add("hidden");
@@ -59,13 +72,14 @@
    */
   function moveDCashBtn() {
     const dCashBtn = document.querySelector("#sl-dcash-btn");
-    const placeOrderDiv = document.querySelector(".place-order");
-    placeOrderDiv.appendChild(dCashBtn);
+    const orderReviewContainer = document.querySelector("#order_review");
+    orderReviewContainer.appendChild(dCashBtn);
     if (document.querySelector("#payment_method_sl_dcash_gateway")?.checked) {
       dCashBtn.style.display = "flex";
     } else {
       document.querySelector("#place_order").classList.remove("hidden");
     }
+    return dCashBtn;
   }
 
   /**
@@ -123,6 +137,7 @@
         validateFields();
         moveDCashBtn();
         handlePaymentOptionChange();
+        handleShippingMethodChanged();
         clearInterval(dCashBtn);
       }
     }, 500);
