@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use SoaringLeads\DCashWC\Helpers\Functions;
+
 /**
  * Setup the DCash gateway configuration fields and settings.
  *
@@ -34,10 +36,9 @@ class DCashGateway extends \WC_Payment_Gateway {
 
 		$this->id                 = 'sl_dcash_gateway';
 		$this->has_fields         = true;
-		$this->method_title       = 'DCash';
+		$this->method_title       = 'DCash Payments';
 		$this->method_description = 'Allow customers to pay with their DCash wallet.';
-		$this->title              = 'Gateway by SoaringLeads';
-		$this->description        = 'test tes tes';
+		$this->title              = 'DCash';
 		$this->initFormFields();
 		$this->init_settings();
 
@@ -55,27 +56,28 @@ class DCashGateway extends \WC_Payment_Gateway {
 	public function initFormFields(): void {
 		$this->form_fields = array(
 			'enabled'     => array(
-				'title'   => __( 'Enable/Disable', 'woocommerce' ),
+				'title'   => __( 'Enable/Disable', 'dcash-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable', 'woocommerce' ),
 				'default' => 'yes',
 			),
 			'api_key'     => array(
-				'title'   => __( 'API Key', 'woocommerce' ),
+				'title'   => __( 'API Key', 'dcash-for-woocommerce' ),
 				'type'    => 'password',
 				'default' => '',
 			),
-			'title'       => array(
-				'title'       => __( 'Title', 'woocommerce' ),
+			'merchant'    => array(
+				'title'       => __( 'Merchant (Store name)', 'dcash-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-				'default'     => '',
-				'desc_tip'    => true,
+				'description' => __( 'The merchant name to show above the DCash QR Code.', 'dcash-for-woocommerce' ),
+				'default'     => 'Merchant',
+				// 'desc_tip'    => true,
 			),
 			'description' => array(
-				'title'   => __( 'Customer Message', 'woocommerce' ),
-				'type'    => 'textarea',
-				'default' => '',
+				'title'       => __( 'Description', 'dcash-for-woocommerce' ),
+				'type'        => 'textarea',
+				'description' => __( 'The text to show when the customer selects the DCash payment method.', 'dcash-for-woocommerce' ),
+				'default'     => '',
 			),
 		);
 	}
@@ -100,22 +102,37 @@ class DCashGateway extends \WC_Payment_Gateway {
 	 */
 	public function payment_fields() {
 
-		$total   = (float) WC()->cart->get_total( 'raw' );
-		$api_key = $this->get_option( 'api_key' );
-		esc_html_e( 'Pay with DCash' );
+		$total    = (float) WC()->cart->get_total( 'raw' );
+		$api_key  = $this->get_option( 'api_key' );
+		$merchant = $this->get_option( 'merchant' );
+
+		WC()->session->set( 'sl_dcash_payment_ID', false );
+		WC()->session->set( 'sl_dcash_payment_ID', Functions::generatePaymentID() );
+		$payment_id = WC()->session->get( 'sl_dcash_payment_ID' );
+
+		if ( ! empty( $payment_id ) ) {
+			echo "<p style='margin-bottom: 0;'>" . $this->get_option( 'description' ) . '</p>';
+		} else {
+			echo "<br/><p style='font-weight: bold'>" . esc_html__( 'There was an issue setting Session Data. Please refresh the page and try again.', 'dcash-for-woocommerce' ) . '</p>';
+			return;
+		}
+
+		/**
+		 * Keep this In PHP to avoid client-side tampering.
+		 * The JS script would be regenerated with the correct data everytime this method is fired.
+		 */
 		?>
 			<div id='sl-dcash-container'>
 			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/img/dcash-logo.png'; ?>"><div id="sl-dcash-btn-content">Pay with DCash</div></a>
 			<div id='dcash-button' style='display: none'/>
 			</div>
-			<!-- Move this script to own file -->
+
 			<script>
 				function show_dcash_button() {
-					const paymentID = 2475
-					// const paymentID = Math.floor(Math.random() * 10000)
+					const paymentID = "<?php echo esc_js( $payment_id ); ?>";
 					console.log(paymentID);
 					let paymentParams = {
-						merchant_name: 'SoaringLeads',
+						merchant_name: "<?php echo esc_js( $merchant ); ?>",
 						callback_url: "https://google.com",
 						amount: <?php echo $total; ?>, // Cost of item; Must be FLOAT type, eg. 1.99
 						payment_id: paymentID, // Your cart ID or invoice ID; Must be a UNIQUE string

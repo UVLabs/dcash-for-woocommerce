@@ -159,8 +159,8 @@ class Main {
 			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-settings-api.php';
 			require_once WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-payment-gateway.php';
 		}
-			$this->loader->add_action( 'plugins_loaded', new DCashGateway(), '__construct', PHP_INT_MAX );
-			$this->loader->add_filter( 'woocommerce_payment_gateways', new DCashGateway(), 'gatewayClass', PHP_INT_MAX );
+		$this->loader->add_action( 'plugins_loaded', new DCashGateway(), '__construct', PHP_INT_MAX );
+		$this->loader->add_filter( 'woocommerce_payment_gateways', new DCashGateway(), 'gatewayClass', PHP_INT_MAX );
 	}
 
 	/**
