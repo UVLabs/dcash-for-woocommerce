@@ -36,8 +36,9 @@ use SoaringLeads\DCashWC\Bootstrap\I18n;
 use SoaringLeads\DCashWC\Bootstrap\AdminEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\FrontendEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\SetupCron;
+use SoaringLeads\DCashWC\Controllers\Frontend\Ajax\Checkout as CheckoutAjaxHandler;
 use SoaringLeads\DCashWC\Controllers\DCashGateway;
-use SoaringLeads\DCashWC\Controllers\Frontend\Checkout as FrontendCheckout;
+use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FilterHooks as CheckoutFilterHooks;
 
 /*
 use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
@@ -214,13 +215,16 @@ class Main {
 			return;
 		}
 
-		$plugin_public            = new FrontendEnqueues();
-		$checkout_page_controller = new FrontendCheckout();
-
+		$plugin_public = new FrontendEnqueues();
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueStyles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueScripts' );
 
+		$checkout_page_controller = new CheckoutFilterHooks();
 		$this->loader->add_filter( 'woocommerce_order_button_html', $checkout_page_controller, 'filterPlaceOrderBtn' );
+
+		$checkout_ajax_controller = new CheckoutAjaxHandler();
+		$this->loader->add_action( 'wp_ajax_nopriv_dCashValidateCheckout', $checkout_ajax_controller, 'validateForm' );
+		$this->loader->add_action( 'wp_ajax_dCashValidateCheckout', $checkout_ajax_controller, 'validateForm' );
 	}
 
 	/**

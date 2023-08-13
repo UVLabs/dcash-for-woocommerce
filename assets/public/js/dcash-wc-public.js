@@ -37,7 +37,7 @@
       const oldDCashBtn = moveDCashBtn();
       const newDCashBtn = document.querySelector("#sl-dcash-btn");
       const placeOrderDiv = document.querySelector("#order_review");
-      placeOrderDiv.replaceChild(newDCashBtn, oldDCashBtn); // So we don't have multiple buttons on page.
+      placeOrderDiv.replaceChild(newDCashBtn, oldDCashBtn); // So we don't have multiple DCash buttons on page.
 
       handlePaymentOptionChange(); // Add event listeners back since the DOM refreshes.
     });
@@ -83,48 +83,50 @@
   }
 
   /**
-   * Check that the checkout fields that need to be filled in are actually so.
+   * Trigger the DCash modal.
+   */
+  function triggerDCashModal() {
+    document
+      .querySelector("#dcash-button")
+      .shadowRoot.querySelector("#payWithEcommerceButton")
+      .click();
+
+    // The modal div is created after the DCash JS button is clicked.
+    document
+      .querySelector("#sl-dcash-container")
+      .appendChild(
+        document
+          .querySelector("#dcash-button")
+          .shadowRoot.querySelector("#modalContainer")
+      );
+  }
+
+  /**
+   * Check that the fields that need to be filled in are actually so.
+   *
+   * @see SoaringLeads\DCashWC\Controllers\Frontend\Ajax\Checkout::validateForm()
    */
   function validateFields() {
     document
       .querySelector("#sl-dcash-btn")
       .addEventListener("click", function (e) {
-        $(".validate-required input, .validate-required select").trigger(
-          "validate"
+        // Add missing checkout fields that should always be there
+        const formElement = document.querySelector(
+          ".checkout.woocommerce-checkout"
         );
+        const formData = new FormData(formElement);
+        const formObject = Object.fromEntries(formData.entries());
 
-        // TODO this checks shipping fields as well...we need to handle cases where ship to a different address is not enabled.
-        // Possible fix is to check if shipping to dif address is enabled and then run through every invalidated field and drop shipping ones
-        var invalidFields = document.querySelectorAll(
-          ".woocommerce-invalid-required-field"
-        );
-
-        if (invalidFields.length > 0) {
-          alert("fix errors");
-        } else {
-          document
-            .querySelector("#dcash-button")
-            .shadowRoot.querySelector("#payWithEcommerceButton")
-            .click();
-          document
-            .querySelector("#sl-dcash-container")
-            .appendChild(
-              document
-                .querySelector("#dcash-button")
-                .shadowRoot.querySelector("#modalContainer")
-            );
-        }
-
-        // wp.ajax
-        // .post("dCashValidateCheckout", {})
-        // .done(function (response) {
-        //   console.log(response);
-        //   // const show = Boolean(response);
-        //   // changeMapVisibility(show);
-        // })
-        // .fail(function (response) {
-        //   console.log(response);
-        // });
+        wp.ajax
+          .post("dCashValidateCheckout", { checkoutFormFields: formObject })
+          .done(function (response) {
+            // console.log(response);
+            triggerDCashModal();
+          })
+          .fail(function (response) {
+            console.log(response);
+            // alert(response.toString());
+          });
       });
   }
 

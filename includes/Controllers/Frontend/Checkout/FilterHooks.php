@@ -10,7 +10,7 @@
  * @package Controllers
  */
 
-namespace SoaringLeads\DCashWC\Controllers\Frontend;
+namespace SoaringLeads\DCashWC\Controllers\Frontend\Checkout;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package SoaringLeads\DCashWC\Controllers\Frontend
  * @since 1.0.0
  */
-class Checkout {
+class FilterHooks {
 
 	/**
 	 * Filter our Place order checkout button to add the hidden class to it.
