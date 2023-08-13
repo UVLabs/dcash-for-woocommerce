@@ -33,7 +33,7 @@ class Functions {
 	 * @since 1.0.0
 	 */
 	public static function generatePaymentID(): string {
-		$bytes       = random_bytes( 5 );
+		$bytes       = random_bytes( 3 );
 		$rand_string = bin2hex( $bytes );
 		$prefix      = 'SL_' . $rand_string . '_';
 		return uniqid( $prefix );
