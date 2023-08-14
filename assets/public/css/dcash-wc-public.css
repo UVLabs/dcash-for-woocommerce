@@ -1,3 +1,7 @@
+.hidden {
+  display: none !important;
+}
+
 #sl-dcash-btn {
   border: none;
   background: linear-gradient(
@@ -16,6 +20,7 @@
   font-size: 16px;
   display: flex;
   align-items: center;
+  margin-bottom: 40px;
 }
 
 #sl-dcash-btn:hover {

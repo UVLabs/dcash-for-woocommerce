@@ -30,6 +30,36 @@
    */
 
   /**
+   * Block the UI like how WC does it.
+   */
+  function blockUI() {
+    $(".woocommerce")
+      .addClass("processing")
+      .block({
+        message: null,
+        overlayCSS: {
+          background: "#fff",
+          opacity: 0.6,
+        },
+      });
+  }
+
+  /**
+   * Unblock the UI.
+   */
+  function unblockUI() {
+    $(".woocommerce")
+      .addClass("processing")
+      .unblock({
+        message: null,
+        overlayCSS: {
+          background: "#fff",
+          opacity: 0.6,
+        },
+      });
+  }
+
+  /**
    * Handle when a customer switches between different shipping methods.
    */
   function handleShippingMethodChanged() {
@@ -86,6 +116,8 @@
    * Trigger the DCash modal.
    */
   function triggerDCashModal() {
+    unblockUI();
+
     document
       .querySelector("#dcash-button")
       .shadowRoot.querySelector("#payWithEcommerceButton")
@@ -107,6 +139,8 @@
    * @param {string} errors
    */
   function showWCErrors(errors) {
+    unblockUI();
+
     // console.log(errors);
     if (typeof errors !== "string") {
       console.error("Errors need to be a string value");
@@ -163,6 +197,8 @@
     document
       .querySelector("#sl-dcash-btn")
       .addEventListener("click", function (e) {
+        blockUI();
+
         // Add missing checkout fields that should always be there
         const formElement = document.querySelector(
           ".checkout.woocommerce-checkout"
@@ -200,6 +236,8 @@
             showWCErrors(response);
           });
       });
+
+    unblockUI(); // Always unblock at end
   }
 
   /**

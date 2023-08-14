@@ -59,7 +59,7 @@ class DCashGateway extends \WC_Payment_Gateway {
 				'title'   => __( 'Enable/Disable', 'dcash-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable', 'woocommerce' ),
-				'default' => 'yes',
+				'default' => 'no',
 			),
 			'api_key'     => array(
 				'title'   => __( 'API Key', 'dcash-for-woocommerce' ),
@@ -77,7 +77,7 @@ class DCashGateway extends \WC_Payment_Gateway {
 				'title'       => __( 'Description', 'dcash-for-woocommerce' ),
 				'type'        => 'textarea',
 				'description' => __( 'The text to show when the customer selects the DCash payment method.', 'dcash-for-woocommerce' ),
-				'default'     => '',
+				'default'     => 'Pay using your DCash wallet.',
 			),
 		);
 	}
@@ -121,11 +121,15 @@ class DCashGateway extends \WC_Payment_Gateway {
 		$payment_id = WC()->session->get( 'sl_dcash_payment_ID' );
 
 		if ( ! empty( $payment_id ) ) {
-			echo "<p style='margin-bottom: 0;'>" . $this->get_option( 'description' ) . '</p>';
+			$description = $this->get_option( 'description' ) ?: __( 'Pay using your DCash wallet.', 'dcash-for-woocommerce' );
+			echo "<p style='margin-bottom: 0;'>" . esc_html( $description ) . '</p>';
 		} else {
 			echo "<br/><p style='font-weight: bold'>" . esc_html__( 'There was an issue setting Session Data. Please refresh the page and try again.', 'dcash-for-woocommerce' ) . '</p>';
 			return;
 		}
+
+		$dcash_logo_path = DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/img/dcash-logo.png';
+		$dcash_btn_text  = __( 'Pay with DCash', 'dcash-for-woocommerce' );
 
 		/**
 		 * Keep this In PHP to avoid client-side tampering.
@@ -133,7 +137,7 @@ class DCashGateway extends \WC_Payment_Gateway {
 		 */
 		?>
 			<div id='sl-dcash-container'>
-			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/img/dcash-logo.png'; ?>"><div id="sl-dcash-btn-content">Pay with DCash</div></a>
+			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
 			<div id='dcash-button' style='display: none'/>
 			</div>
 
@@ -143,30 +147,26 @@ class DCashGateway extends \WC_Payment_Gateway {
 					console.log(paymentID);
 					let paymentParams = {
 						merchant_name: "<?php echo esc_js( $merchant ); ?>",
-						callback_url: "https://google.com",
-						amount: <?php echo $total; ?>, // Cost of item; Must be FLOAT type, eg. 1.99
-						payment_id: paymentID, // Your cart ID or invoice ID; Must be a UNIQUE string
+						callback_url: "https://spiffy-book.localsite.io/",
+						amount: <?php echo esc_js( $total ); ?>,
+						payment_id: paymentID,
 						memo: "This is a test transaction. Cart ID " +  paymentID,
-						// API Key received for DCash e-commerce
-						api_key: '<?php echo $api_key; ?>',
-						// Optional function called when payment is completed
+						api_key: '<?php echo esc_js( $api_key ); ?>',
 						onPaid: function(details) {
 							console.log('User paid:', details);
 							jQuery('#place_order').trigger('click');
 						},
-						// Optional function called when payment window is cancelled
 						onCancel: function() {
 							console.log('User cancelled');
 						},
-						// Optional function called when payment window throws an error
 						onError: function(err) {
 							console.log('User error', err);
 						}
 					};
-					// Send payment parameters and show button
+					// Send payment parameters and show button.
 					dcash.ecommerce.button.render(paymentParams, '#dcash-button');
 				}
-				show_dcash_button(); // To show the DCash button
+				show_dcash_button(); // To show the DCash button.
 			</script>
 		<?php
 	}
@@ -182,12 +182,12 @@ class DCashGateway extends \WC_Payment_Gateway {
 		global $woocommerce;
 		$order = new \WC_Order( $order_id );
 
-		// ray($_POST);
-
 		// This always returns true but we can maybe find a better way to process the payment by using a callback
 		// https://woocommerce.com/document/payment-gateway-api/#section-7
 		$dcash_success = true;
 
+		// The fact that this is always true leaves it open to fake orders.
+		// We should ideally set the payment as pending and use the callback from DCash to update to payment complete.
 		if ( $dcash_success ) {
 			$order->payment_complete();
 		} else {
