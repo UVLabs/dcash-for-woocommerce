@@ -86,7 +86,7 @@
         const id = e.target.id;
         const dCashBtn = document.querySelector("#sl-dcash-btn");
         const placeOrderBtn = document.querySelector("#place_order");
-        if (id === "payment_method_sl_dcash_gateway") {
+        if (id === "payment_method_dcash_for_wc_gateway") {
           dCashBtn.style.display = "flex";
           placeOrderBtn.classList.add("hidden");
         } else {
@@ -104,7 +104,9 @@
     const dCashBtn = document.querySelector("#sl-dcash-btn");
     const orderReviewContainer = document.querySelector("#order_review");
     orderReviewContainer.appendChild(dCashBtn);
-    if (document.querySelector("#payment_method_sl_dcash_gateway")?.checked) {
+    if (
+      document.querySelector("#payment_method_dcash_for_wc_gateway")?.checked
+    ) {
       dCashBtn.style.display = "flex";
     } else {
       document.querySelector("#place_order").classList.remove("hidden");

@@ -55,15 +55,10 @@ class Functions {
 			'meta_compare' => '=', // Possible values are ‘=’, ‘!=’, ‘>’, ‘>=’, ‘<‘, ‘<=’, ‘LIKE’, ‘NOT LIKE’, ‘IN’, ‘NOT IN’, ‘BETWEEN’, ‘NOT BETWEEN’, ‘EXISTS’ (only in WP >= 3.5), and ‘NOT EXISTS’ (also only in WP >= 3.5). Values ‘REGEXP’, ‘NOT REGEXP’ and ‘RLIKE’ were added in WordPress 3.7. Default value is ‘=’.
 		);
 
-		$order = '';
-
-		$order = wc_get_orders( $args );
+		$order = \wc_get_orders( $args ); // TODO write function to replace this when not available.
 
 		if ( is_array( $order ) && ! empty( $order ) ) {
 			return $order[0]; // TODO Maybe use array_merge instead to remove top level index and return whole array
-		} else {
-			// Log
-			// Most likely order not yet saved to DB.
 		}
 
 		return $order;

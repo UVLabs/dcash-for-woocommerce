@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use SoaringLeads\DCashWC\Models\DCash\Callback as CallbackModel;
+use WC_Action_Queue;
 
 /**
  * DCash callback class.
@@ -27,6 +27,42 @@ use SoaringLeads\DCashWC\Models\DCash\Callback as CallbackModel;
  * @since 1.0.0
  */
 class Callback {
+
+	/**
+	 * Schedule an action to when request is received from DCash gateway.
+	 *
+	 * @param array $request_data
+	 * @return void
+	 */
+	private function createScheduledAction( array $request_data ): void {
+
+		if ( ! class_exists( 'WC_Action_Queue' ) ) {
+			require_once WP_PLUGIN_DIR . '/woocommerce/includes/interfaces/class-wc-queue-interface.php';
+			require_once WP_PLUGIN_DIR . '/woocommerce/includes/queue/class-wc-action-queue.php';
+		}
+
+		try {
+			// code...
+			$action_scheduler = new WC_Action_Queue();
+		} catch ( \Throwable $th ) {
+			// throw $th;
+			// TODO Log
+			return;
+		}
+
+		$result = $action_scheduler->schedule_single(
+			time() + 60,
+			'dcash_for_wc_update_order_status',
+			array(
+				'request_data' => $request_data,
+			),
+			'dcash-for-wc'
+		);
+
+		if ( empty( $result ) ) {
+			// TODO Log this means setting the event failed.
+		}
+	}
 
 	/**
 	 * Handle the request sent back by the DCash API.
@@ -58,8 +94,7 @@ class Callback {
 			return;
 		}
 
-		( new CallbackModel() )->updateOrderStatus( $request_data );
-
+		$this->createScheduledAction( $request_data );
 	}
 
 }

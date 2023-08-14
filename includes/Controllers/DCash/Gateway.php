@@ -34,7 +34,7 @@ class Gateway extends \WC_Payment_Gateway {
 	 */
 	public function __construct() {
 
-		$this->id                 = 'sl_dcash_gateway';
+		$this->id                 = 'dcash_for_wc_gateway';
 		$this->has_fields         = true;
 		$this->method_title       = 'DCash Payments';
 		$this->method_description = 'Allow customers to pay with their DCash wallet.';
@@ -54,6 +54,7 @@ class Gateway extends \WC_Payment_Gateway {
 	 * @since 1.0.0
 	 */
 	public function initFormFields(): void {
+
 		$this->form_fields = array(
 			'enabled'     => array(
 				'title'   => __( 'Enable/Disable', 'dcash-for-woocommerce' ),
@@ -116,9 +117,9 @@ class Gateway extends \WC_Payment_Gateway {
 		}
 		$merchant = $this->get_option( 'merchant' );
 
-		WC()->session->set( 'sl_dcash_payment_ID', false );
-		WC()->session->set( 'sl_dcash_payment_ID', Functions::generatePaymentID() );
-		$payment_id = WC()->session->get( 'sl_dcash_payment_ID' );
+		WC()->session->set( 'dcash_for_wc_payment_ID', false );
+		WC()->session->set( 'dcash_for_wc_payment_ID', Functions::generatePaymentID() );
+		$payment_id = WC()->session->get( 'dcash_for_wc_payment_ID' );
 
 		if ( ! empty( $payment_id ) ) {
 			$description = $this->get_option( 'description' ) ?: __( 'Pay using your DCash wallet.', 'dcash-for-woocommerce' );
@@ -141,7 +142,7 @@ class Gateway extends \WC_Payment_Gateway {
 		 * The JS script would be regenerated with the correct data everytime this method is fired.
 		 */
 		?>
-			<input id='sl-dcash-payment-id' type='text' name='sl_dcash_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
+			<input id='sl-dcash-payment-id' type='hidden' name='dcash_for_wc_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
 			<div id='sl-dcash-container'>
 			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
 			<div id='dcash-button' style='display: none'/>
@@ -186,7 +187,7 @@ class Gateway extends \WC_Payment_Gateway {
 		global $woocommerce;
 		$order = new \WC_Order( $order_id );
 
-		$dcash_payment_id = sanitize_text_field( wp_unslash( ( $_POST['sl_dcash_payment_id'] ?? '' ) ) );
+		$dcash_payment_id = sanitize_text_field( wp_unslash( ( $_POST['dcash_for_wc_payment_id'] ?? '' ) ) );
 		$updated          = update_post_meta( $order_id, 'dcash_payment_id', $dcash_payment_id );
 
 		if ( false === $updated ) {
@@ -194,6 +195,7 @@ class Gateway extends \WC_Payment_Gateway {
 			$text .= __( 'Please screenshot this notice and share it with us when reaching out.' );
 			$msg   = '<strong>' . $text . '</strong>';
 			wc_add_notice( $msg, 'error' );
+			// TODO Log that updating the order failed.
 			return;
 		}
 

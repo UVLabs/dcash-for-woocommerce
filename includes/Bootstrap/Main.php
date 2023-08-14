@@ -40,6 +40,7 @@ use SoaringLeads\DCashWC\Controllers\DCash\Callback as CallbackHandler;
 use SoaringLeads\DCashWC\Controllers\Frontend\Ajax\Checkout as CheckoutAjaxHandler;
 use SoaringLeads\DCashWC\Controllers\DCash\Gateway as DCashGateway;
 use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FilterHooks as CheckoutFilterHooks;
+use SoaringLeads\DCashWC\Models\DCash\Callback as CallbackModel;
 
 /*
 use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
@@ -229,6 +230,9 @@ class Main {
 
 		$callback_controller = new CallbackHandler();
 		$this->loader->add_action( 'woocommerce_api_sl-dcash-callback-handler', $callback_controller, 'consumeRequest' );
+
+		$callback_model = new CallbackModel();
+		$this->loader->add_action( 'dcash_for_wc_update_order_status', $callback_model, 'updateOrderStatus' );
 	}
 
 	/**

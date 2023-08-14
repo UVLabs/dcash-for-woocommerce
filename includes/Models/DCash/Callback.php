@@ -45,25 +45,6 @@ class Callback extends BaseModel {
 	protected string $payment_id;
 
 	/**
-	 * Save a request sent back from the DCash API to the DB.
-	 *
-	 * @param mixed $event_data
-	 * @return void
-	 * @since 1.0.0
-	 */
-	public function saveEvent( $event_data ): void {
-		$table = $this->wpdb->prefix . 'dcash_callback_events';
-
-		$data = array(
-			'payment_id' => $event_data['payment_id'] ?? '',
-			'state'      => $event_data['state'] ?? '',
-			'data'       => serialize( $event_data ),
-		);
-
-		$this->wpdb->insert( $table, $data );
-	}
-
-	/**
 	 * Add settling transaction order note.
 	 */
 	private function addSettlingTransactionNote() {
@@ -85,21 +66,24 @@ class Callback extends BaseModel {
 	 *
 	 * Based on the state received from the DCash API.
 	 *
-	 * @param array $request_data
+	 * @param array $request_data The data from the DCash API.
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function updateOrderStatus( array $request_data ) {
+	public function updateOrderStatus( $request_data ) {
 
 		$state      = $request_data['state'];
 		$payment_id = $request_data['payment_id'];
 
-		$this->saveEvent( $request_data );
-
 		$this->payment_id = $payment_id;
 
 		try {
-			$this->order = Functions::getOrderByPaymentID( $payment_id );
+			$order       = Functions::getOrderByPaymentID( $payment_id );
+			$this->order = $order;
+			if ( empty( $order ) ) {
+				// Log...we need this to be an valid to update the order.
+				return;
+			}
 		} catch ( \Throwable $th ) {
 			// Log
 			return;
@@ -107,16 +91,16 @@ class Callback extends BaseModel {
 
 		switch ( $state ) {
 			case 'settling_commerce_transaction':
-				// TODO This runs too early and at this point the order might not be in the DB yet.
-				// Move to storing events and then later processing them.
-				// $this->addSettlingTransactionNote();
+				$this->addSettlingTransactionNote();
 				break;
+
 			case 'complete':
 				$this->setPaymentComplete();
 				break;
 
 			default:
 				// code...
+				// Log received unlogged state
 				break;
 		}
 
