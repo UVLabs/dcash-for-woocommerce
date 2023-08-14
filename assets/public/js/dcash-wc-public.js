@@ -102,6 +102,59 @@
   }
 
   /**
+   * Show errors recieved from PHP after validating the checkout form.
+   *
+   * @param {string} errors
+   */
+  function showWCErrors(errors) {
+    // console.log(errors);
+    if (typeof errors !== "string") {
+      console.error("Errors need to be a string value");
+      alert(
+        "An error occurred, ensure that all information is filled in correctly. Please contact us this message continues to appear."
+      );
+      location.reload();
+      return;
+    }
+
+    const html = `
+    <div id='sl-dcash-wc-errors' class="woocommerce-NoticeGroup woocommerce-NoticeGroup-checkout">
+    <ul class="woocommerce-error" role="alert">
+    ${errors}
+    </ul>
+    </div>
+    `;
+
+    // Remove default WooCommerce errors if present. We are going to be showing all errors in our new errors Div.
+    const defaultErrorsDiv = document.querySelector(
+      ".woocommerce-NoticeGroup-checkout"
+    );
+    if (defaultErrorsDiv) {
+      defaultErrorsDiv.remove();
+    }
+
+    const errorsDiv = document.querySelector("#sl-dcash-wc-errors");
+    if (errorsDiv) {
+      errorsDiv.remove();
+    }
+
+    document
+      .querySelector(".checkout.woocommerce-checkout")
+      .insertAdjacentHTML("afterbegin", html);
+
+    const container = document.querySelector(".woocommerce");
+    if (container) {
+      document
+        .querySelector(".woocommerce")
+        .scrollIntoView({ behavior: "smooth" });
+    } else {
+      document
+        .querySelector("#sl-dcash-wc-errors")
+        .scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  /**
    * Check that the fields that need to be filled in are actually so.
    *
    * @see SoaringLeads\DCashWC\Controllers\Frontend\Ajax\Checkout::validateForm()
@@ -117,6 +170,25 @@
         const formData = new FormData(formElement);
         const formObject = Object.fromEntries(formData.entries());
 
+        const shipToDifferentAddressEl = document.querySelector(
+          "#ship-to-different-address-checkbox"
+        );
+        let shipToDifferentAddress = false;
+
+        if (shipToDifferentAddressEl) {
+          if (shipToDifferentAddressEl.checked) {
+            shipToDifferentAddress = true;
+          }
+        }
+
+        formObject.ship_to_different_address = shipToDifferentAddress;
+        /**
+         * This is field only POSTed when JS is not available in the browser.
+         * Since we depend on JS then this will always be false.
+         * see woocommerce/templates/checkout/payment.php
+         */
+        formObject.woocommerce_checkout_update_totals = false;
+
         wp.ajax
           .post("dCashValidateCheckout", { checkoutFormFields: formObject })
           .done(function (response) {
@@ -124,8 +196,8 @@
             triggerDCashModal();
           })
           .fail(function (response) {
-            console.log(response);
-            // alert(response.toString());
+            // console.log(response);
+            showWCErrors(response);
           });
       });
   }

@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FormValidator;
+use WP_Error;
 
 /**
  * Class responsible for creating methods that handle Ajax requests from the checkout page.
@@ -25,6 +26,33 @@ use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FormValidator;
  * @since 1.0.0
  */
 class Checkout {
+
+	/**
+	 * Prepare and format any errors that should be shown on the frontend.
+	 *
+	 * @param WP_Error $errors
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private function prepareCheckoutErrors( WP_Error $errors ): string {
+
+		$errors_blob = '';
+		foreach ( $errors->errors as $error_id => $error_array ) {
+			$errors_list = '';
+			$attributes  = '';
+			foreach ( $errors->error_data as $error_data_id => $error_data_array ) {
+				if ( $error_data_id === $error_id ) {
+					foreach ( $error_data_array as $html_attribute => $value ) {
+						$attributes .= 'data-' . $html_attribute . '=' . "'$value'";
+					}
+				}
+			}
+			$errors_list  = implode( $error_array );
+			$errors_blob .= "<li $attributes>$errors_list</li>";
+		}
+
+		return $errors_blob;
+	}
 
 	/**
 	 * Handler for validating the Checkout page form.
@@ -37,12 +65,13 @@ class Checkout {
 		$fields = wp_unslash( ( $_REQUEST['checkoutFormFields'] ?? array() ) );
 		$fields = array_map( 'sanitize_text_field', $fields );
 
-		$errors = ( new FormValidator() )->validate( $fields );
+		$errors     = ( new FormValidator() )->validate( $fields );
+		$errors_str = $this->prepareCheckoutErrors( $errors );
 
 		if ( false === $errors->has_errors() ) {
 			wp_send_json_success();
 		} else {
-			wp_send_json_error( $errors->get_error_messages(), 200 );
+			wp_send_json_error( $errors_str );
 		}
 	}
 }

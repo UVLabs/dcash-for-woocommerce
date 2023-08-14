@@ -35,8 +35,24 @@ class FormValidator extends \WC_Checkout {
 	 * @since 1.0.0
 	 */
 	public function validate( $fields ): WP_Error {
+		// See WC_Checkout::get_posted_data().
+		$fields['ship_to_different_address']          = filter_var( ( $fields['ship_to_different_address'] ), FILTER_VALIDATE_BOOLEAN );
+		$fields['woocommerce_checkout_update_totals'] = filter_var( ( $fields['woocommerce_checkout_update_totals'] ), FILTER_VALIDATE_BOOLEAN );
+		$fields['terms']                              = (int) isset( $fields['terms'] );
+		$fields['terms-field']                        = (int) isset( $fields['terms-field'] );
+		$fields['createaccount']                      = (int) ( $this->is_registration_enabled() ? ! empty( $fields['createaccount'] ) : false );
+
 		$errors = new WP_Error();
+
+		do_action( 'dcash_wc_before_checkout_validate', $fields, $errors );
+
 		$this->validate_checkout( $fields, $errors );
+
+		do_action( 'dcash_wc_after_checkout_validate', $fields, $errors );
+
+		// Allow filtering
+		$errors = apply_filters( 'dcash_wc_checkout_errors', $errors, $fields );
+
 		return $errors; // Updated by reference.
 	}
 
