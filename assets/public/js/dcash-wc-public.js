@@ -116,7 +116,6 @@
    * Trigger the DCash modal.
    */
   function triggerDCashModal() {
-    
     // Remove any errors once the modal is triggered
     const errorsDiv = document.querySelector("#sl-dcash-wc-errors");
     if (errorsDiv) {
