@@ -102,8 +102,18 @@ class DCashGateway extends \WC_Payment_Gateway {
 	 */
 	public function payment_fields() {
 
-		$total    = (float) WC()->cart->get_total( 'raw' );
-		$api_key  = $this->get_option( 'api_key' );
+		$total   = (float) WC()->cart->get_total( 'raw' );
+		$api_key = $this->get_option( 'api_key' );
+
+		if ( empty( $api_key ) ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				echo "<p style='margin-bottom: 0;'>" . esc_html__( 'Please enter your DCash Merchant API Key to accept DCash payments.', 'dcash-for-woocommerce' ) . '</p>';
+				return;
+			} else {
+				echo "<p style='margin-bottom: 0;'>" . esc_html__( 'Payment method not available yet, please check back later.', 'dcash-for-woocommerce' ) . '</p>';
+				return;
+			}
+		}
 		$merchant = $this->get_option( 'merchant' );
 
 		WC()->session->set( 'sl_dcash_payment_ID', false );
