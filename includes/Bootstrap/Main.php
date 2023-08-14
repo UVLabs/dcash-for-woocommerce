@@ -36,8 +36,9 @@ use SoaringLeads\DCashWC\Bootstrap\I18n;
 use SoaringLeads\DCashWC\Bootstrap\AdminEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\FrontendEnqueues;
 use SoaringLeads\DCashWC\Bootstrap\SetupCron;
+use SoaringLeads\DCashWC\Controllers\DCash\Callback as CallbackHandler;
 use SoaringLeads\DCashWC\Controllers\Frontend\Ajax\Checkout as CheckoutAjaxHandler;
-use SoaringLeads\DCashWC\Controllers\DCashGateway;
+use SoaringLeads\DCashWC\Controllers\DCash\Gateway as DCashGateway;
 use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FilterHooks as CheckoutFilterHooks;
 
 /*
@@ -225,6 +226,9 @@ class Main {
 		$checkout_ajax_controller = new CheckoutAjaxHandler();
 		$this->loader->add_action( 'wp_ajax_nopriv_dCashValidateCheckout', $checkout_ajax_controller, 'validateForm' );
 		$this->loader->add_action( 'wp_ajax_dCashValidateCheckout', $checkout_ajax_controller, 'validateForm' );
+
+		$callback_controller = new CallbackHandler();
+		$this->loader->add_action( 'woocommerce_api_sl-dcash-callback-handler', $callback_controller, 'consumeRequest' );
 	}
 
 	/**

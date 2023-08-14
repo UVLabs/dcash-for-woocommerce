@@ -10,7 +10,7 @@
  * @package Controllers
  */
 
-namespace SoaringLeads\DCashWC\Controllers;
+namespace SoaringLeads\DCashWC\Controllers\DCash;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +24,7 @@ use SoaringLeads\DCashWC\Helpers\Functions;
  * @package SoaringLeads\DCashWC\Controllers
  * @since 1.0.0
  */
-class DCashGateway extends \WC_Payment_Gateway {
+class Gateway extends \WC_Payment_Gateway {
 
 	/**
 	 * Construct class.
@@ -90,7 +90,7 @@ class DCashGateway extends \WC_Payment_Gateway {
 	 * @since 1.0.0
 	 */
 	public function gatewayClass( array $methods ): array {
-		$methods[] = 'SoaringLeads\DCashWC\Controllers\DCashGateway';
+		$methods[] = 'SoaringLeads\DCashWC\Controllers\DCash\Gateway';
 		return $methods;
 	}
 
@@ -130,12 +130,18 @@ class DCashGateway extends \WC_Payment_Gateway {
 
 		$dcash_logo_path = DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/img/dcash-logo.png';
 		$dcash_btn_text  = __( 'Pay with DCash', 'dcash-for-woocommerce' );
+		$callback_url    = home_url( '/', 'https' ) . 'wc-api/sl-dcash-callback-handler/';
+
+		if ( DCASH_WC_DEBUG ) {
+			$callback_url = 'https://rainbow:hungry@spiffy-book.localsite.io/wc-api/sl-dcash-callback-handler/';
+		}
 
 		/**
 		 * Keep this In PHP to avoid client-side tampering.
 		 * The JS script would be regenerated with the correct data everytime this method is fired.
 		 */
 		?>
+			<input id='sl-dcash-payment-id' type='text' name='sl_dcash_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
 			<div id='sl-dcash-container'>
 			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
 			<div id='dcash-button' style='display: none'/>
@@ -143,14 +149,12 @@ class DCashGateway extends \WC_Payment_Gateway {
 
 			<script>
 				function show_dcash_button() {
-					const paymentID = "<?php echo esc_js( $payment_id ); ?>";
-					console.log(paymentID);
 					let paymentParams = {
 						merchant_name: "<?php echo esc_js( $merchant ); ?>",
-						callback_url: "https://spiffy-book.localsite.io/",
+						callback_url: "<?php echo esc_js( $callback_url ); ?>",
 						amount: <?php echo esc_js( $total ); ?>,
-						payment_id: paymentID,
-						memo: "This is a test transaction. Cart ID " +  paymentID,
+						payment_id: "<?php echo esc_js( $payment_id ); ?>",
+						memo: "This is a test transaction. Payment ID: " + "<?php echo esc_js( $payment_id ); ?>",
 						api_key: '<?php echo esc_js( $api_key ); ?>',
 						onPaid: function(details) {
 							console.log('User paid:', details);
@@ -182,16 +186,14 @@ class DCashGateway extends \WC_Payment_Gateway {
 		global $woocommerce;
 		$order = new \WC_Order( $order_id );
 
-		// This always returns true but we can maybe find a better way to process the payment by using a callback
-		// https://woocommerce.com/document/payment-gateway-api/#section-7
-		$dcash_success = true;
+		$dcash_payment_id = sanitize_text_field( wp_unslash( ( $_POST['sl_dcash_payment_id'] ?? '' ) ) );
+		$updated          = update_post_meta( $order_id, 'dcash_payment_id', $dcash_payment_id );
 
-		// The fact that this is always true leaves it open to fake orders.
-		// We should ideally set the payment as pending and use the callback from DCash to update to payment complete.
-		if ( $dcash_success ) {
-			$order->payment_complete();
-		} else {
-			wc_add_notice( __( 'Payment error:', 'woothemes' ) . ' Something went wrong', 'error' );
+		if ( false === $updated ) {
+			$text  = __( 'There was an issue completing the order. Please contact us as soon as possible to let us know about this issue. Your Order ID is:', 'dcash-for-woocommerce' ) . ' ' . $order_id . '. ';
+			$text .= __( 'Please screenshot this notice and share it with us when reaching out.' );
+			$msg   = '<strong>' . $text . '</strong>';
+			wc_add_notice( $msg, 'error' );
 			return;
 		}
 
