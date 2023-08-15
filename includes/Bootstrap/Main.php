@@ -220,6 +220,7 @@ class Main {
 		$plugin_public = new FrontendEnqueues();
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueStyles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueueScripts' );
+		$this->loader->add_filter( 'script_loader_tag', $plugin_public, 'make_scripts_modules', 10, 3 );
 
 		$checkout_page_controller = new CheckoutFilterHooks();
 		$this->loader->add_filter( 'woocommerce_order_button_html', $checkout_page_controller, 'filterPlaceOrderBtn' );

@@ -104,4 +104,38 @@ class FrontendEnqueues {
 		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', array( 'jquery', 'wp-util', "{$this->plugin_name}-debug-script" ), $this->version );
 	}
 
+	/**
+	 * Turn a script into a module so that we can make use of JS components.
+	 *
+	 * @param string $tag
+	 * @param string $handle
+	 * @param string $src
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public function make_scripts_modules( string $tag, string $handle, string $src ) {
+
+		$handles = array(
+			$this->plugin_name,
+		);
+
+		if ( ! in_array( $handle, $handles ) ) {
+			return $tag;
+		}
+
+		$id = $handle . '-js';
+
+		$parts = explode( '</script>', $tag ); // Break up our string
+
+		foreach ( $parts as $key => $part ) {
+			if ( false !== strpos( $part, $src ) ) { // Make sure we're only altering the tag for our module script.
+				$parts[ $key ] = '<script type="module" src="' . esc_url( $src ) . '" id="' . esc_attr( $id ) . '">';
+			}
+		}
+
+		$tags = implode( '</script>', $parts ); // Bring everything back together
+
+		return $tags;
+	}
+
 }
