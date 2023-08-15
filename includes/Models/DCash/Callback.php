@@ -58,6 +58,7 @@ class Callback extends BaseModel {
 	 * @since 1.0.0
 	 */
 	private function setPaymentComplete() {
+		$this->order->add_order_note( __( 'Payment successful, ID:', '' ) . ' ' . $this->payment_id );
 		$this->order->payment_complete( $this->payment_id );
 	}
 
