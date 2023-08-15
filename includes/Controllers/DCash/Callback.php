@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use SoaringLeads\DCashWC\Helpers\Logger;
 use WC_Action_Queue;
 
 /**
@@ -42,11 +43,9 @@ class Callback {
 		}
 
 		try {
-			// code...
 			$action_scheduler = new WC_Action_Queue();
 		} catch ( \Throwable $th ) {
-			// throw $th;
-			// TODO Log
+			( new Logger() )->logCritical( "Could not instantiate WC_Action_Queue. Error: \n\n" . $th->getMessage() );
 			return;
 		}
 
@@ -71,10 +70,11 @@ class Callback {
 	 * @since 1.0.0
 	 */
 	public function consumeRequest(): void {
-		$request_data = json_decode( file_get_contents( 'php://input' ), true );
+		$response     = file_get_contents( 'php://input' );
+		$request_data = json_decode( $response, true );
 
 		if ( ! is_array( $request_data ) ) {
-			// TODO Handle this. Maybe add a WC error log.
+			( new Logger() )->logWarning( "Failed to convert DCash callback request to array. Response: \n\n" . print_r( $response, true ) );
 			return;
 		}
 
@@ -83,14 +83,14 @@ class Callback {
 		$payment_id = $request_data['payment_id'] ?? '';
 
 		if ( empty( $payment_id ) ) {
-			// Log
+			( new Logger() )->logWarning( "DCash API callback request did not contain a payment_id array key. Response: \n\n" . print_r( $request_data, true ) );
 			return;
 		}
 
 		$state = $request_data['state'] ?? '';
 
 		if ( empty( $state ) ) {
-			// Log
+			( new Logger() )->logWarning( "DCash API callback request did not contain a state array key. Response:  \n\n" . print_r( $request_data, true ) );
 			return;
 		}
 

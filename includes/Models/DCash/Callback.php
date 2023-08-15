@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use SoaringLeads\DCashWC\Helpers\Functions;
+use SoaringLeads\DCashWC\Helpers\Logger;
 use SoaringLeads\DCashWC\Models\BaseModel;
 use WC_Order;
 
@@ -82,11 +83,11 @@ class Callback extends BaseModel {
 			$order       = Functions::getOrderByPaymentID( $payment_id );
 			$this->order = $order;
 			if ( empty( $order ) ) {
-				// Log...we need this to be an valid to update the order.
+				( new Logger() )->logError( 'Order object is empty. Unable to update order status for order with Payment ID: ' . $payment_id );
 				return;
 			}
 		} catch ( \Throwable $th ) {
-			// Log
+			( new Logger() )->logCritical( "There was a critical issue updating the order status. Error: \n\n" . $th->getMessage() );
 			return;
 		}
 
@@ -100,8 +101,7 @@ class Callback extends BaseModel {
 				break;
 
 			default:
-				// code...
-				// Log received unlogged state
+				( new Logger() )->logInfo( 'The state received by the DCash API is not yet accounted for. State: ' . $state );
 				break;
 		}
 

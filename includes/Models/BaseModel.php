@@ -12,11 +12,11 @@
 
 namespace SoaringLeads\DCashWC\Models;
 
-use wpdb;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+use wpdb;
 
 /**
  * Base Model Class.
