@@ -144,8 +144,8 @@ class Gateway extends \WC_Payment_Gateway {
 		?>
 			<input id='sl-dcash-payment-id' type='hidden' name='dcash_for_wc_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
 			<div id='sl-dcash-container'>
-			<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
-			<div id='dcash-button' style='display: none'/>
+				<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
+				<div id='dcash-button' style='display: none'></div>
 			</div>
 
 			<script>
@@ -159,7 +159,8 @@ class Gateway extends \WC_Payment_Gateway {
 						api_key: '<?php echo esc_js( $api_key ); ?>',
 						onPaid: function(details) {
 							console.log('User paid:', details);
-							jQuery('#place_order').trigger('click');
+							// jQuery('#place_order').trigger('click');
+							document.querySelector('#place_order').click();
 						},
 						onCancel: function() {
 							console.log('User cancelled');
