@@ -63,7 +63,14 @@ class Checkout {
 	public function validateForm(): void {
 
 		$fields = wp_unslash( ( $_REQUEST['checkoutFormFields'] ?? array() ) );
-		$fields = array_map( 'sanitize_text_field', $fields );
+
+		array_walk_recursive(
+			$fields,
+			function( &$value, $key ) {
+
+				$value = sanitize_text_field( $value );
+			}
+		);
 
 		$errors     = ( new FormValidator() )->validate( $fields );
 		$errors_str = $this->prepareCheckoutErrors( $errors );

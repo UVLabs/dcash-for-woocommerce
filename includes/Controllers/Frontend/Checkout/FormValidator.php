@@ -50,7 +50,7 @@ class FormValidator extends \WC_Checkout {
 
 		do_action( 'dcash_wc_after_checkout_validate', $fields, $errors );
 
-		// Allow filtering
+		// Allow filtering.
 		$errors = apply_filters( 'dcash_wc_checkout_errors', $errors, $fields );
 
 		return $errors; // Updated by reference.

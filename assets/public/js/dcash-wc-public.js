@@ -207,12 +207,20 @@
       .addEventListener("click", function (e) {
         blockUI();
 
-        // Add missing checkout fields that should always be there
+        // Add missing checkout fields that should always be there.
         const formElement = document.querySelector(
           ".checkout.woocommerce-checkout"
         );
         const formData = new FormData(formElement);
         const formObject = Object.fromEntries(formData.entries());
+
+        // Handle multiselect fields.
+        for (const key in formObject) {
+          if (key.includes("[") && key.includes("]")) {
+            const normalizedKey = key.split("[")[0];
+            formObject[normalizedKey] = formData.getAll(key);
+          }
+        }
 
         const shipToDifferentAddressEl = document.querySelector(
           "#ship-to-different-address-checkbox"
