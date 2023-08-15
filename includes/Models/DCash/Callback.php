@@ -80,12 +80,12 @@ class Callback extends BaseModel {
 		$this->payment_id = $payment_id;
 
 		try {
-			$order       = Functions::getOrderByPaymentID( $payment_id );
-			$this->order = $order;
+			$order = Functions::getOrderByPaymentID( $payment_id );
 			if ( empty( $order ) ) {
 				( new Logger() )->logError( 'Order object is empty. Unable to update order status for order with Payment ID: ' . $payment_id );
 				return;
 			}
+			$this->order = $order;
 		} catch ( \Throwable $th ) {
 			( new Logger() )->logCritical( "There was a critical issue updating the order status. Error: \n\n" . $th->getMessage() );
 			return;

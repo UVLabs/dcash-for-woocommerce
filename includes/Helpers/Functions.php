@@ -58,7 +58,7 @@ class Functions {
 		$order = \wc_get_orders( $args ); // TODO write function to replace this when not available.
 
 		if ( is_array( $order ) && ! empty( $order ) ) {
-			return $order[0]; // TODO Maybe use array_merge instead to remove top level index and return whole array
+			return $order[0] ?? '';
 		}
 
 		return $order;
