@@ -44,8 +44,6 @@ class Gateway extends \WC_Payment_Gateway {
 		$this->init_settings();
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		// Below URL not being found
-		// wp_enqueue_script('sl-dcash-js',  'https://api.easterncaribbean.org/merchant-ecommerce/dcash-ecommerce.js', array('jquery'), '1.0.0', true);
 	}
 
 	/**
@@ -79,7 +77,6 @@ class Gateway extends \WC_Payment_Gateway {
 				'type'        => 'text',
 				'description' => __( 'The merchant name to show above the DCash QR Code.', 'dcash-for-woocommerce' ),
 				'default'     => 'Merchant',
-				// 'desc_tip'    => true,
 			),
 			'description' => array(
 				'title'       => __( 'Description', 'dcash-for-woocommerce' ),
@@ -93,7 +90,7 @@ class Gateway extends \WC_Payment_Gateway {
 	/**
 	 * Add gateway class to list of gateways so WooCommerce knows about it.
 	 *
-	 * @param array $methods
+	 * @param array $methods the current registered payment methods.
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -188,7 +185,7 @@ class Gateway extends \WC_Payment_Gateway {
 	/**
 	 * Process the payment.
 	 *
-	 * @param int $order_id
+	 * @param int $order_id The order ID.
 	 * @return array
 	 * @since 1.0.0
 	 */
@@ -215,10 +212,10 @@ class Gateway extends \WC_Payment_Gateway {
 			return;
 		}
 
-		// Empty cart
+		// Empty cart.
 		$woocommerce->cart->empty_cart();
 
-		// Return thankyou redirect
+		// Return thankyou redirect.
 		return array(
 			'result'   => 'success',
 			'redirect' => $this->get_return_url( $order ),

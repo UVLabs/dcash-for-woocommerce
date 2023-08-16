@@ -42,10 +42,8 @@ use SoaringLeads\DCashWC\Controllers\DCash\Gateway as DCashGateway;
 use SoaringLeads\DCashWC\Controllers\Frontend\Checkout\FilterHooks as CheckoutFilterHooks;
 use SoaringLeads\DCashWC\Models\DCash\Callback as CallbackModel;
 
-/*
 use SoaringLeads\DCashWC\Notices\Loader as NoticesLoader;
 use SoaringLeads\DCashWC\Notices\Notice;
-*/
 
 /**
  * Class Main.
@@ -182,11 +180,9 @@ class Main {
 		$plugin_admin         = new AdminEnqueues();
 		$bootstrap_cron_setup = new SetupCron();
 
-		/*
-		// (uncomment if making use of notice class).
-		$notice               = new Notice();
-		$notices_loader       = new NoticesLoader();
-		*/
+		$notice         = new Notice();
+		$notices_loader = new NoticesLoader();
+
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueueStyles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueueScripts' );
 
@@ -195,13 +191,11 @@ class Main {
 		// Cron tasks.
 		$this->loader->add_action( 'admin_init', $bootstrap_cron_setup, 'setCronTasks' );
 
-		/*
-		// Notices Loader (uncomment if making use of notice class).
+		// Notices Loader.
 		$this->loader->add_action( 'admin_notices', $notices_loader, 'loadNotices' );
 
-		// Notices Ajax dismiss method (uncomment if making use of notice class).
+		// Notices Ajax dismiss method.
 		$this->loader->add_action( 'wp_ajax_dcash_wc_dismissNotice', $notice, 'dismissNotice' );
-		*/
 	}
 
 	/**

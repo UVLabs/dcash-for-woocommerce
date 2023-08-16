@@ -32,8 +32,11 @@ class Callback {
 	/**
 	 * Schedule an action to when request is received from DCash gateway.
 	 *
-	 * @param array $request_data
+	 * We need this to change the order status to completed when the callback response is received from the DCash API.
+	 *
+	 * @param array $request_data The response data sent back by the DCash API.
 	 * @return void
+	 * @since 1.0.0
 	 */
 	private function createScheduledAction( array $request_data ): void {
 
@@ -59,7 +62,7 @@ class Callback {
 		);
 
 		if ( empty( $result ) ) {
-			// TODO Log this means setting the event failed.
+			( new Logger() )->logWarning( 'Issue creating scheduled event for updating the order status.' );
 		}
 	}
 
@@ -70,6 +73,7 @@ class Callback {
 	 * @since 1.0.0
 	 */
 	public function consumeRequest(): void {
+
 		$response     = file_get_contents( 'php://input' );
 		$request_data = json_decode( $response, true );
 

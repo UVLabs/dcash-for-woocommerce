@@ -30,7 +30,7 @@ class FormValidator extends \WC_Checkout {
 	/**
 	 * Validate the Checkout page form.
 	 *
-	 * @param mixed $fields
+	 * @param mixed $fields The Checkout fields to validate.
 	 * @return WP_Error
 	 * @since 1.0.0
 	 */

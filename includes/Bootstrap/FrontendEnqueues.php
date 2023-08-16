@@ -107,22 +107,22 @@ class FrontendEnqueues {
 			'wp-util',
 		);
 		if ( Functions::sandboxModeEnabled() === false ) {
-			wp_enqueue_script( $this->plugin_name . '-live-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce.js', array( 'jquery' ), $this->version );
+			wp_enqueue_script( $this->plugin_name . '-live-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce.js', array( 'jquery' ), $this->version, false );
 			array_push( $dcash_script_dependencies, "{$this->plugin_name}-live-script" );
 		} else {
-			wp_enqueue_script( $this->plugin_name . '-sandbox-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce-sandbox.js', array( 'jquery' ), $this->version );
+			wp_enqueue_script( $this->plugin_name . '-sandbox-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce-sandbox.js', array( 'jquery' ), $this->version, false );
 			array_push( $dcash_script_dependencies, "{$this->plugin_name}-sandbox-script" );
 		}
 
-		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', $dcash_script_dependencies, $this->version );
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', $dcash_script_dependencies, $this->version, false );
 	}
 
 	/**
 	 * Turn a script into a module so that we can make use of JS components.
 	 *
-	 * @param string $tag
-	 * @param string $handle
-	 * @param string $src
+	 * @param string $tag The entire <script> tag.
+	 * @param string $handle The handle used to register the script.
+	 * @param string $src The source of the script.
 	 * @return string
 	 * @since 1.0.0
 	 */
@@ -132,21 +132,21 @@ class FrontendEnqueues {
 			$this->plugin_name,
 		);
 
-		if ( ! in_array( $handle, $handles ) ) {
+		if ( ! in_array( $handle, $handles, true ) ) {
 			return $tag;
 		}
 
 		$id = $handle . '-js';
 
-		$parts = explode( '</script>', $tag ); // Break up our string
+		$parts = explode( '</script>', $tag ); // Break up our string.
 
 		foreach ( $parts as $key => $part ) {
 			if ( false !== strpos( $part, $src ) ) { // Make sure we're only altering the tag for our module script.
-				$parts[ $key ] = '<script type="module" src="' . esc_url( $src ) . '" id="' . esc_attr( $id ) . '">';
+				$parts[ $key ] = '<script type="module" src="' . esc_url( $src ) . '" id="' . esc_attr( $id ) . '">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- We're not enqueuing or outputting any script here.
 			}
 		}
 
-		$tags = implode( '</script>', $parts ); // Bring everything back together
+		$tags = implode( '</script>', $parts ); // Bring everything back together.
 
 		return $tags;
 	}

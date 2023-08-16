@@ -33,7 +33,7 @@ class Logger extends WC_Logger {
 	/**
 	 * Save a Critical log.
 	 *
-	 * @param string $msg
+	 * @param string $msg The error message.
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -44,7 +44,7 @@ class Logger extends WC_Logger {
 	/**
 	 * Save an Error log.
 	 *
-	 * @param string $msg
+	 * @param string $msg The error message.
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -55,7 +55,7 @@ class Logger extends WC_Logger {
 	/**
 	 * Save a Warning log.
 	 *
-	 * @param string $msg
+	 * @param string $msg The error message.
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -66,7 +66,7 @@ class Logger extends WC_Logger {
 	/**
 	 * Save an Info log.
 	 *
-	 * @param string $msg
+	 * @param string $msg The error message.
 	 * @return void
 	 * @since 1.0.0
 	 */

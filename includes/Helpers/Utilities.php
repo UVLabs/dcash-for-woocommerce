@@ -27,14 +27,15 @@ class Utilities {
 	/**
 	 * Get a DCash order by the DCash Payment ID.
 	 *
+	 * @param string $payment_id The DCash Payment ID to search for.
 	 * @return WC_Order
 	 * @since 1.0.0
 	 */
-	public static function getOrderByPaymentID( $payment_id ) {
+	public static function getOrderByPaymentID( string $payment_id ) {
 
 		$args = array(
-			'meta_key'     => 'dcash_payment_id', // Postmeta key field
-			'meta_value'   => $payment_id, // Postmeta value field
+			'meta_key'     => 'dcash_payment_id',
+			'meta_value'   => $payment_id,
 			'meta_compare' => '=', // Possible values are ‘=’, ‘!=’, ‘>’, ‘>=’, ‘<‘, ‘<=’, ‘LIKE’, ‘NOT LIKE’, ‘IN’, ‘NOT IN’, ‘BETWEEN’, ‘NOT BETWEEN’, ‘EXISTS’ (only in WP >= 3.5), and ‘NOT EXISTS’ (also only in WP >= 3.5). Values ‘REGEXP’, ‘NOT REGEXP’ and ‘RLIKE’ were added in WordPress 3.7. Default value is ‘=’.
 		);
 

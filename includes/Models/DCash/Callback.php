@@ -32,8 +32,10 @@ use WC_Order;
 class Callback extends BaseModel {
 
 	/**
+	 * The WooCommerce order object.
 	 *
 	 * @var WC_Order
+	 * @since 1.0.0
 	 */
 	protected $order;
 
@@ -47,6 +49,9 @@ class Callback extends BaseModel {
 
 	/**
 	 * Add settling transaction order note.
+	 *
+	 * @return void
+	 * @since 1.0.0
 	 */
 	private function addSettlingTransactionNote() {
 		$this->order->add_order_note( __( 'Settling Transaction for Payment ID:', '' ) . ' ' . $this->payment_id );

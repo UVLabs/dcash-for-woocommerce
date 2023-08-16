@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use SoaringLeads\DCashWC\Notices\UpsellsNotices;
 use SoaringLeads\DCashWC\Notices\ReviewNotices;
 
 /**
@@ -30,7 +29,6 @@ class Loader {
 	 * @return void
 	 */
 	public function loadNotices() {
-		( new UpsellsNotices() );
-		( new ReviewNotices() );
+		// ( new ReviewNotices() );
 	}
 }
