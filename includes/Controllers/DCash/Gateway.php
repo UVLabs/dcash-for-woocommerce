@@ -141,6 +141,12 @@ class Gateway extends \WC_Payment_Gateway {
 			$callback_url = 'https://rainbow:hungry@spiffy-book.localsite.io/wc-api/sl-dcash-callback-handler/';
 		}
 
+		if ( Functions::sandboxModeEnabled() ) {
+			$memo = __( 'This is a test transaction. Payment ID:', 'dcash-for-woocommerce' ) . ' ' . $payment_id;
+		} else {
+			$memo = __( 'Online Payment from WooCommerce Store. Payment ID:', 'dcash-for-woocommerce' ) . ' ' . $payment_id;
+		}
+
 		/**
 		 * Keep this In PHP to avoid client-side tampering.
 		 * The JS script would be regenerated with the correct data everytime this method is fired.
@@ -160,7 +166,7 @@ class Gateway extends \WC_Payment_Gateway {
 						callback_url: "<?php echo esc_js( $callback_url ); ?>",
 						amount: <?php echo esc_js( $total ); ?>,
 						payment_id: "<?php echo esc_js( $payment_id ); ?>",
-						memo: "This is a test transaction. Payment ID: " + "<?php echo esc_js( $payment_id ); ?>",
+						memo: "<?php echo esc_js( $memo ); ?>",
 						api_key: '<?php echo esc_js( $api_key ); ?>',
 						onPaid: function(details) {
 							console.log('User paid:', details);
