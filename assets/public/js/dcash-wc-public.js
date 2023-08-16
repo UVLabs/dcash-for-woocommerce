@@ -133,7 +133,7 @@
 
     // The modal div is created after the DCash JS button is clicked.
     document
-      .querySelector("#sl-dcash-container")
+      .querySelector("#sl-dcash-btn-container")
       .appendChild(
         document
           .querySelector("#dcash-button")
@@ -241,8 +241,11 @@
          */
         formObject.woocommerce_checkout_update_totals = false;
 
+        // Checkout nonce to validate checkout process.
+        const checkoutNonce = document.querySelector('#woocommerce-process-checkout-nonce').value;
+
         wp.ajax
-          .post("dCashValidateCheckout", { checkoutFormFields: formObject })
+          .post("dCashValidateCheckout", { checkoutFormFields: formObject, dCashWCNonce:  checkoutNonce })
           .done(function (response) {
             // console.log(response);
             triggerDCashModal();

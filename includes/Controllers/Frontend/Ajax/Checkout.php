@@ -30,7 +30,7 @@ class Checkout {
 	/**
 	 * Prepare and format any errors that should be shown on the frontend.
 	 *
-	 * @param WP_Error $errors
+	 * @param WP_Error $errors WooCommerce checkout errors.
 	 * @return string
 	 * @since 1.0.0
 	 */
@@ -62,12 +62,17 @@ class Checkout {
 	 */
 	public function validateForm(): void {
 
-		$fields = wp_unslash( ( $_REQUEST['checkoutFormFields'] ?? array() ) );
+		$nonce = sanitize_text_field( wp_unslash( ( $_REQUEST['dCashWCNonce'] ?? '' ) ) );
+
+		if ( empty( wp_verify_nonce( $nonce, 'woocommerce-process_checkout' ) ) ) {
+			wp_send_json_error( '<li>' . __( 'Nonce verification failed. Please try refreshing the page and placing the order again. Contact us if this issue persists.', '' ) . '</li>' );
+		}
+
+		$fields = wp_unslash( ( $_REQUEST['checkoutFormFields'] ?? array() ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- This is a multidimensional array. We're sanitizing all values in array_walk_recursive below.
 
 		array_walk_recursive(
 			$fields,
 			function( &$value, $key ) {
-
 				$value = sanitize_text_field( $value );
 			}
 		);

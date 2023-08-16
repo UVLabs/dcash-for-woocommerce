@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use SoaringLeads\DCashWC\Helpers\Functions;
+use SoaringLeads\DCashWC\Helpers\Logger;
 
 /**
  * Setup the DCash gateway configuration fields and settings.
@@ -148,8 +149,9 @@ class Gateway extends \WC_Payment_Gateway {
 		 * The JS script would be regenerated with the correct data everytime this method is fired.
 		 */
 		?>
-			<input id='sl-dcash-payment-id' type='hidden' name='dcash_for_wc_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
-			<div id='sl-dcash-container'>
+			<input id='dcash-for-woocommerce-payment-id' type='hidden' name='dcash_for_wc_payment_id' value='<?php echo esc_attr( $payment_id ); ?>'/>
+			<?php wp_nonce_field( 'dcash_for_woocommerce_payment_id', 'dcash-for-woocommerce-payment-id-nonce' ); ?>
+			<div id='sl-dcash-btn-container'>
 				<a id="sl-dcash-btn" style='text-decoration: none; display: none;'><img id="sl-dcash-btn-logo" src="<?php echo esc_attr( $dcash_logo_path ); ?>"><div id="sl-dcash-btn-content"><?php echo esc_html( $dcash_btn_text ); ?></div></a>
 				<div id='dcash-button' style='display: none'></div>
 			</div>
@@ -194,15 +196,22 @@ class Gateway extends \WC_Payment_Gateway {
 		global $woocommerce;
 		$order = new \WC_Order( $order_id );
 
-		$dcash_payment_id = sanitize_text_field( wp_unslash( ( $_POST['dcash_for_wc_payment_id'] ?? '' ) ) );
-		$updated          = update_post_meta( $order_id, 'dcash_payment_id', $dcash_payment_id );
+		$dcash_payment_id       = sanitize_text_field( wp_unslash( ( $_POST['dcash_for_wc_payment_id'] ?? '' ) ) );
+		$dcash_payment_id_nonce = sanitize_text_field( wp_unslash( ( $_POST['dcash-for-woocommerce-payment-id-nonce'] ?? '' ) ) );
+
+		if ( empty( wp_verify_nonce( $dcash_payment_id_nonce, 'dcash_for_woocommerce_payment_id' ) ) ) {
+			( new Logger() )->logError( 'Issue validating DCash Payment ID: ' . $dcash_payment_id . ', nonce: ' . $dcash_payment_id_nonce );
+			return;
+		}
+
+		$updated = update_post_meta( $order_id, 'dcash_payment_id', $dcash_payment_id );
 
 		if ( false === $updated ) {
 			$text  = __( 'There was an issue completing the order. Please contact us as soon as possible to let us know about this issue. Your Order ID is:', 'dcash-for-woocommerce' ) . ' ' . $order_id . '. ';
 			$text .= __( 'Please screenshot this notice and share it with us when reaching out.' );
 			$msg   = '<strong>' . $text . '</strong>';
 			wc_add_notice( $msg, 'error' );
-			// TODO Log that updating the order failed.
+			( new Logger() )->logWarning( 'An issue occurred while attaching the DCash Payment ID to the order. Payment ID: ' . $dcash_payment_id . ', Order ID: ' . $order_id );
 			return;
 		}
 
