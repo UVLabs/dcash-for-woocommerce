@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use SoaringLeads\DCashWC\Helpers\Functions;
 use SoaringLeads\DCashWC\Helpers\Logger;
+use SoaringLeads\DCashWC\Helpers\Utilities;
 use SoaringLeads\DCashWC\Models\BaseModel;
 use WC_Order;
 
@@ -80,7 +80,7 @@ class Callback extends BaseModel {
 		$this->payment_id = $payment_id;
 
 		try {
-			$order = Functions::getOrderByPaymentID( $payment_id );
+			$order = Utilities::getOrderByPaymentID( $payment_id );
 			if ( empty( $order ) ) {
 				( new Logger() )->logError( 'Order object is empty. Unable to update order status for order with Payment ID: ' . $payment_id );
 				return;

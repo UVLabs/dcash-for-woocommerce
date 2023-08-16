@@ -42,29 +42,6 @@ class Functions {
 	}
 
 	/**
-	 * Get a DCash order by the DCash Payment ID.
-	 *
-	 * @return WC_Order
-	 * @since 1.0.0
-	 */
-	public static function getOrderByPaymentID( $payment_id ) {
-
-		$args = array(
-			'meta_key'     => 'dcash_payment_id', // Postmeta key field
-			'meta_value'   => $payment_id, // Postmeta value field
-			'meta_compare' => '=', // Possible values are ‘=’, ‘!=’, ‘>’, ‘>=’, ‘<‘, ‘<=’, ‘LIKE’, ‘NOT LIKE’, ‘IN’, ‘NOT IN’, ‘BETWEEN’, ‘NOT BETWEEN’, ‘EXISTS’ (only in WP >= 3.5), and ‘NOT EXISTS’ (also only in WP >= 3.5). Values ‘REGEXP’, ‘NOT REGEXP’ and ‘RLIKE’ were added in WordPress 3.7. Default value is ‘=’.
-		);
-
-		$order = \wc_get_orders( $args ); // TODO write function to replace this when not available.
-
-		if ( is_array( $order ) && ! empty( $order ) ) {
-			return $order[0] ?? '';
-		}
-
-		return $order;
-	}
-
-	/**
 	 * Check if sandbox mode is enabled for DCash payments.
 	 *
 	 * This is necessary for testing DCash beta payments.
