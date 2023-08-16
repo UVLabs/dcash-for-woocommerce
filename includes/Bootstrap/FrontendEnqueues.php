@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use SoaringLeads\DCashWC\Helpers\Functions;
+
 /**
  * Class responsible for methods to do with frontend enqueing of JS and CSS.
  *
@@ -99,9 +101,20 @@ class FrontendEnqueues {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		$dir = ( DCASH_WC_DEBUG === false ) ? 'build/' : '';
-		wp_enqueue_script( $this->plugin_name . '-debug-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce-debug.js', array( 'jquery' ), $this->version );
-		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', array( 'jquery', 'wp-util', "{$this->plugin_name}-debug-script" ), $this->version );
+		$dir                       = ( DCASH_WC_DEBUG === false ) ? 'build/' : '';
+		$dcash_script_dependencies = array(
+			'jquery',
+			'wp-util',
+		);
+		if ( Functions::sandboxModeEnabled() === false ) {
+			wp_enqueue_script( $this->plugin_name . '-live-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce.js', array( 'jquery' ), $this->version );
+			array_push( $dcash_script_dependencies, "{$this->plugin_name}-live-script" );
+		} else {
+			wp_enqueue_script( $this->plugin_name . '-sandbox-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce-sandbox.js', array( 'jquery' ), $this->version );
+			array_push( $dcash_script_dependencies, "{$this->plugin_name}-sandbox-script" );
+		}
+
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', $dcash_script_dependencies, $this->version );
 	}
 
 	/**

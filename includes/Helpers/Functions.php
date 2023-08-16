@@ -63,4 +63,22 @@ class Functions {
 
 		return $order;
 	}
+
+	/**
+	 * Check if sandbox mode is enabled for DCash payments.
+	 *
+	 * This is necessary for testing DCash beta payments.
+	 *
+	 * @return bool
+	 * @since 1.0.0
+	 */
+	public static function sandboxModeEnabled(): bool {
+
+		$settings_key = DCASH_WC_GATEWAY_SETTINGS_KEY;
+		$option_name  = 'woocommerce_' . $settings_key . '_settings';
+		$settings     = get_option( $option_name );
+		$sandbox      = $settings['sandbox'] ?? '';
+
+		return filter_var( $sandbox, FILTER_VALIDATE_BOOLEAN );
+	}
 }

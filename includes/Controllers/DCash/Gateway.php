@@ -34,7 +34,7 @@ class Gateway extends \WC_Payment_Gateway {
 	 */
 	public function __construct() {
 
-		$this->id                 = 'dcash_for_wc_gateway';
+		$this->id                 = DCASH_WC_GATEWAY_SETTINGS_KEY;
 		$this->has_fields         = true;
 		$this->method_title       = 'DCash Payments';
 		$this->method_description = 'Allow customers to pay with their DCash wallet.';
@@ -60,6 +60,12 @@ class Gateway extends \WC_Payment_Gateway {
 				'title'   => __( 'Enable/Disable', 'dcash-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable', 'woocommerce' ),
+				'default' => 'no',
+			),
+			'sandbox'     => array(
+				'title'   => __( 'Sandbox', 'dcash-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Enable sandbox mode for testing payments.', 'woocommerce' ),
 				'default' => 'no',
 			),
 			'api_key'     => array(

@@ -114,6 +114,7 @@ define( 'DCASH_WC_PLUGIN_DIR', __DIR__ . '/' );
 define( 'DCASH_WC_PLUGIN_ASSETS_DIR', __DIR__ . '/assets/' );
 define( 'DCASH_WC_PLUGIN_ASSETS_PATH_URL', plugin_dir_url( __FILE__ ) . 'assets/' );
 define( 'DCASH_WC_PLUGIN_PATH_URL', plugin_dir_url( __FILE__ ) );
+define( 'DCASH_WC_GATEWAY_SETTINGS_KEY', 'dcash_for_wc_gateway' );
 
 $debug = false;
 
