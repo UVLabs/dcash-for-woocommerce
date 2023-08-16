@@ -2,10 +2,10 @@
 /**
  * The public-facing functionality of the plugin.
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 /**
@@ -14,19 +14,21 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the public-facing stylesheet and JavaScript.
  *
- * @package    Root
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author_name     Uriahs Victor <plugins@soaringleads.com>
  */
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use SoaringLeads\DCashWC\Helpers\Functions;
+
 /**
  * Class responsible for methods to do with frontend enqueing of JS and CSS.
  *
- * @package Root\Bootstrap
+ * @package SoaringLeads\DCashWC\Bootstrap
  * @since 1.0.0
  */
 class FrontendEnqueues {
@@ -55,8 +57,8 @@ class FrontendEnqueues {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		$this->plugin_name = PREFIX_PLUGIN_NAME;
-		$this->version     = PREFIX_VERSION;
+		$this->plugin_name = DCASH_WC_PLUGIN_NAME;
+		$this->version     = DCASH_WC_VERSION;
 	}
 
 	/**
@@ -78,7 +80,7 @@ class FrontendEnqueues {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'public/css/prefix-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/css/dcash-wc-public.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -99,8 +101,54 @@ class FrontendEnqueues {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		$dir                       = ( DCASH_WC_DEBUG === false ) ? 'build/' : '';
+		$dcash_script_dependencies = array(
+			'jquery',
+			'wp-util',
+		);
+		if ( Functions::sandboxModeEnabled() === false ) {
+			wp_enqueue_script( $this->plugin_name . '-live-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce.js', array( 'jquery' ), $this->version, false );
+			array_push( $dcash_script_dependencies, "{$this->plugin_name}-live-script" );
+		} else {
+			wp_enqueue_script( $this->plugin_name . '-sandbox-script', DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/lib/dcash-ecommerce-sandbox.js', array( 'jquery' ), $this->version, false );
+			array_push( $dcash_script_dependencies, "{$this->plugin_name}-sandbox-script" );
+		}
 
-		wp_enqueue_script( $this->plugin_name, PREFIX_PLUGIN_ASSETS_PATH_URL . 'public/js/prefix-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, DCASH_WC_PLUGIN_ASSETS_PATH_URL . 'public/js/' . $dir . 'dcash-wc-public.js', $dcash_script_dependencies, $this->version, false );
+	}
+
+	/**
+	 * Turn a script into a module so that we can make use of JS components.
+	 *
+	 * @param string $tag The entire <script> tag.
+	 * @param string $handle The handle used to register the script.
+	 * @param string $src The source of the script.
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public function make_scripts_modules( string $tag, string $handle, string $src ) {
+
+		$handles = array(
+			$this->plugin_name,
+		);
+
+		if ( ! in_array( $handle, $handles, true ) ) {
+			return $tag;
+		}
+
+		$id = $handle . '-js';
+
+		$parts = explode( '</script>', $tag ); // Break up our string.
+
+		foreach ( $parts as $key => $part ) {
+			if ( false !== strpos( $part, $src ) ) { // Make sure we're only altering the tag for our module script.
+				$parts[ $key ] = '<script type="module" src="' . esc_url( $src ) . '" id="' . esc_attr( $id ) . '">'; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript -- We're not enqueuing or outputting any script here.
+			}
+		}
+
+		$tags = implode( '</script>', $parts ); // Bring everything back together.
+
+		return $tags;
 	}
 
 }

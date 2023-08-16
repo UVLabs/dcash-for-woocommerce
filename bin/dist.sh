@@ -4,11 +4,11 @@
 
 # Start fresh
 rm -rf dist
-rm -rf artifact
+rm -rf artifact-dcash
 
 # Make our directories
 mkdir -p dist
-mkdir -p artifact
+mkdir -p artifact-dcash
 
 # Remove vendor folder so we can redownload without dev dependencies.
 rm -rf vendor
@@ -27,7 +27,7 @@ npm run build
 rsync -acvP --delete --exclude-from=".distignore" ./ "./dist"
 
 #Change to our dist folder and zip to artifact folder
-(cd dist && zip -r ../artifact/prefix.zip .)
+(cd dist && zip -r ../artifact-dcash/dcash-for-woocommerce.zip .)
 
 # Delete dist folder
 rm -rf dist

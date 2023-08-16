@@ -1,15 +1,15 @@
 <?php
 /**
- * Trait which holds information about the PREFIX plugin.
+ * Trait which holds information about the DCASH_WC plugin.
  *
- * Author:          plugin_author_name
+ * Author:          Uriahs Victor
  *
- * @link    plugin_author_url
+ * @link    https://soaringleads.com
  * @since   1.0.0
  * @package Notices
  */
 
-namespace Root\Traits;
+namespace SoaringLeads\DCashWC\Traits;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,9 +23,9 @@ use DateTime;
 trait PluginInfo {
 
 	/**
-	 * Returns the number of days since PREFIX has been installed.
+	 * Returns the number of days since DCASH_WC has been installed.
 	 *
-	 * If the prefix_first_install_date option is not found. We return 2 days.
+	 * If the dcash_wc_first_install_date option is not found. We return 2 days.
 	 *
 	 * @since    1.0.0
 	 * @return int Days since plugin has been installed.
@@ -34,7 +34,7 @@ trait PluginInfo {
 
 		// Get the installed date.
 		// If option does not exist then set installed date as two days ago.
-		$installed_date = get_option( 'prefix_first_install_date' );
+		$installed_date = get_option( 'dcash_wc_first_install_date' );
 
 		if ( ! empty( $installed_date ) ) {
 			$installed_date = '@' . $installed_date;
@@ -50,11 +50,11 @@ trait PluginInfo {
 	}
 
 	/**
-	 * Get the version PREFIX was installed at.
+	 * Get the version DCASH_WC was installed at.
 	 *
 	 * @return mixed
 	 */
 	private function getInstalledAtVersion() {
-		return get_option( 'prefix_installed_at_version' );
+		return get_option( 'dcash_wc_installed_at_version' );
 	}
 }

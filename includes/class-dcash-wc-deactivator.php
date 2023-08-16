@@ -2,10 +2,10 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,9 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Root
- * @subpackage Root/includes
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author     Uriahs Victor <plugins@soaringleads.com>
  */
 class RootDeactivator {
 

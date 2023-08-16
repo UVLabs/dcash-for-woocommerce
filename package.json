@@ -1,5 +1,5 @@
 {
-  "name": "Root",
+  "name": "dcashwc",
   "version": "1.0.0",
   "description": "",
   "dependencies": {},
@@ -17,14 +17,14 @@
   "targets": {
     "public": {
       "source": [
-        "./assets/public/js/prefix-public.js"
+        "./assets/public/js/dcash-wc-public.js"
       ],
       "sourceMap": false,
       "distDir": "./assets/public/js/build/"
     },
     "admin": {
       "source": [
-        "./assets/admin/js/prefix-admin.js"
+        "./assets/admin/js/dcash-wc-admin.js"
       ],
       "sourceMap": false,
       "distDir": "./assets/admin/js/build/"

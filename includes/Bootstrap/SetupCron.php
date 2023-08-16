@@ -10,7 +10,7 @@
  * @package Bootstrap
  */
 
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

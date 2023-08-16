@@ -2,21 +2,20 @@
 /**
  * Load Notices to admin notices hook.
  *
- * Author:          plugin_author_name
+ * Author:          Uriahs Victor
  *
- * @link    plugin_author_url
+ * @link    https://soaringleads.com
  * @since   1.0.0
  * @package Notices
  */
 
-namespace Root\Notices;
+namespace SoaringLeads\DCashWC\Notices;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Root\Notices\UpsellsNotices;
-use Root\Notices\ReviewNotices;
+use SoaringLeads\DCashWC\Notices\ReviewNotices;
 
 /**
  * The Loader class.
@@ -30,7 +29,6 @@ class Loader {
 	 * @return void
 	 */
 	public function loadNotices() {
-		( new UpsellsNotices() );
-		( new ReviewNotices() );
+		// ( new ReviewNotices() );
 	}
 }

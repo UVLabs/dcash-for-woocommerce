@@ -1,7 +1,7 @@
 .DS_Store
 .parcel-cache
 .vscode
-artifact
+artifact-dcash
 dist
 logs
 node_modules

@@ -5,10 +5,10 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       plugin_author_url
+ * @link       https://soaringleads.com
  * @since      1.0.0
  *
- * @package    Root
+ * @package    SoaringLeads\DCashWC
  */
 
 /**
@@ -18,10 +18,10 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Root
- * @author_name     plugin_author_name <plugin_author_email>
+ * @package    SoaringLeads\DCashWC
+ * @author_name     Uriahs Victor <plugins@soaringleads.com>
  */
-namespace Root\Bootstrap;
+namespace SoaringLeads\DCashWC\Bootstrap;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class responsible for setting up text domain.
  *
- * @package Root\Bootstrap
+ * @package SoaringLeads\DCashWC\Bootstrap
  */
 class I18n {
 
@@ -42,7 +42,7 @@ class I18n {
 	public function loadPluginTextdomain() {
 
 		load_plugin_textdomain(
-			'text-domain',
+			'dcash-for-woocommerce',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
