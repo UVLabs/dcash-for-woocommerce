@@ -70,6 +70,37 @@ if ( defined( 'PHP_VERSION' ) ) {
 	}
 }
 
+/**
+ * Check that WooCommerce is active.
+ *
+ * This needs to happen before freemius does any work.
+ *
+ * @since 1.0.0
+ */
+
+if ( ! function_exists( 'sl_wc_active' ) ) {
+	function sl_wc_active() {
+		$active_plugins = (array) apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+		if ( is_multisite() ) {
+			$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
+		}
+		return in_array( 'woocommerce/woocommerce.php', $active_plugins ) || array_key_exists( 'woocommerce/woocommerce.php', $active_plugins ) || class_exists( 'WooCommerce' );
+	}
+}
+
+if ( ! sl_wc_active() ) {
+	add_action(
+		'admin_notices',
+		function () {
+			echo "<div class='notice notice-error is-dismissible'>";
+			/* translators: 1: Opening <p> HTML element 2: Opening <strong> HTML element 3: Closing <strong> HTML element 4: Closing <p> HTML element  */
+			echo sprintf( esc_html__( '%1$s%2$sDCash for WooCommerce NOTICE:%3$s WooCommerce is not activated, please activate it to use the plugin.%4$s', 'dcash-for-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
+			echo '</div>';
+		}
+	);
+	return;
+}
+
 // Composer autoload.
 require dirname( __FILE__ ) . '/vendor/autoload.php';
 
