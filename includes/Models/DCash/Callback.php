@@ -65,7 +65,10 @@ class Callback extends BaseModel {
 	 */
 	private function setPaymentComplete() {
 		$this->order->add_order_note( __( 'Payment successful, ID:', '' ) . ' ' . $this->payment_id );
-		$this->order->payment_complete( $this->payment_id );
+		$updated = $this->order->payment_complete( $this->payment_id );
+		if ( ! $updated ) {
+			( new Logger() )->logError( 'There was an issue updating the order status. Check WC Log file' );
+		}
 	}
 
 	/**
