@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package    SoaringLeads\DCashWC
  * @author     Uriahs Victor <plugins@soaringleads.com>
  */
-class RootDeactivator {
+class DCashWCDeactivator {
 
 	/**
 	 * Method fired on plugin deactivation.

@@ -116,7 +116,7 @@ if ( ! function_exists( 'activate_prefix' ) ) {
 	 */
 	function activate_prefix() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dcash-wc-activator.php';
-		RootActivator::activate();
+		DCashWCActivator::activate();
 	}
 }
 
@@ -132,7 +132,7 @@ if ( ! function_exists( 'deactivate_prefix' ) ) {
 	 */
 	function deactivate_prefix() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dcash-wc-deactivator.php';
-		RootDeactivator::deactivate();
+		DCashWCDeactivator::deactivate();
 	}
 }
 
