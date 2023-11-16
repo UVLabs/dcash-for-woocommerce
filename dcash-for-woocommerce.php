@@ -12,7 +12,7 @@
  * @package           SoaringLeads\DCashWC
  *
  * @wordpress-plugin
- * Plugin Name:       DCash for WooCommerce
+ * Plugin Name:       Integrate DCash with WooCommerce
  * Plugin URI:        https://soaringleads.com/
  * Description:       Accept DCash payments on your WooCommerce store.
  * Version:           1.0.1
@@ -21,7 +21,7 @@
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Requires PHP: 7.4
- * Text Domain:       dcash-for-woocommerce
+ * Text Domain:       integrate-dcash-with-woocommerce
  */
 
 if ( ! defined( 'WPINC' ) ) {
@@ -44,7 +44,7 @@ if ( function_exists( 'phpversion' ) ) {
 			function() {
 				echo "<div class='notice notice-error is-dismissible'>";
 				/* translators: 1: Opening <p> HTML element 2: Opening <strong> HTML element 3: Closing <strong> HTML element 4: Closing <p> HTML element  */
-				echo sprintf( esc_html__( '%1$s%2$s DCash for WooCommerce NOTICE:%3$s PHP version too low to use this plugin. Please change to at least PHP 7.4. You can contact your web host for assistance in updating your PHP version.%4$s', 'dcash-for-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
+				echo sprintf( esc_html__( '%1$s%2$s DCash for WooCommerce NOTICE:%3$s PHP version too low to use this plugin. Please change to at least PHP 7.4. You can contact your web host for assistance in updating your PHP version.%4$s', 'integrate-dcash-with-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
 				echo '</div>';
 			}
 		);
@@ -62,7 +62,7 @@ if ( defined( 'PHP_VERSION' ) ) {
 			function() {
 				echo "<div class='notice notice-error is-dismissible'>";
 				/* translators: 1: Opening <p> HTML element 2: Opening <strong> HTML element 3: Closing <strong> HTML element 4: Closing <p> HTML element  */
-				echo sprintf( esc_html__( '%1$s%2$s DCash for WooCommerce NOTICE:%3$s PHP version too low to use this plugin. Please change to at least PHP 7.4. You can contact your web host for assistance in updating your PHP version.%4$s', 'dcash-for-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
+				echo sprintf( esc_html__( '%1$s%2$s DCash for WooCommerce NOTICE:%3$s PHP version too low to use this plugin. Please change to at least PHP 7.4. You can contact your web host for assistance in updating your PHP version.%4$s', 'integrate-dcash-with-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
 				echo '</div>';
 			}
 		);
@@ -94,7 +94,7 @@ if ( ! sl_wc_active() ) {
 		function () {
 			echo "<div class='notice notice-error is-dismissible'>";
 			/* translators: 1: Opening <p> HTML element 2: Opening <strong> HTML element 3: Closing <strong> HTML element 4: Closing <p> HTML element  */
-			echo sprintf( esc_html__( '%1$s%2$sDCash for WooCommerce NOTICE:%3$s WooCommerce is not activated, please activate it to use the plugin.%4$s', 'dcash-for-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
+			echo sprintf( esc_html__( '%1$s%2$sDCash for WooCommerce NOTICE:%3$s WooCommerce is not activated, please activate it to use the plugin.%4$s', 'integrate-dcash-with-woocommerce' ), '<p>', '<strong>', '</strong>', '</p>' );
 			echo '</div>';
 		}
 	);

@@ -51,10 +51,10 @@ class ReviewNotices extends Notice {
 		}
 
 		$content = array(
-			'title' => __( 'Has DCash for WooCommerce Helped You?', 'dcash-for-woocommerce' ),
-			'body'  => __( 'Hey! its Uriahs Victor, Sole Developer working on DCash for WooCommerce. Has the plugin benefitted your website? If yes, then would you mind taking a few seconds to leave a kind review? Reviews go a long way and they really help keep me motivated to continue working on the plugin and making it better.', 'dcash-for-woocommerce' ),
-			'cta'   => __( 'Sure!', 'dcash-for-woocommerce' ),
-			'link'  => 'https://wordpress.org/support/plugin/dcash-for-woocommerce/reviews/#new-post',
+			'title' => __( 'Has DCash for WooCommerce Helped You?', 'integrate-dcash-with-woocommerce' ),
+			'body'  => __( 'Hey! its Uriahs Victor, Sole Developer working on DCash for WooCommerce. Has the plugin benefitted your website? If yes, then would you mind taking a few seconds to leave a kind review? Reviews go a long way and they really help keep me motivated to continue working on the plugin and making it better.', 'integrate-dcash-with-woocommerce' ),
+			'cta'   => __( 'Sure!', 'integrate-dcash-with-woocommerce' ),
+			'link'  => 'https://wordpress.org/support/plugin/integrate-dcash-with-woocommerce/reviews/#new-post',
 		);
 
 		$this->createNoticeMarkup( 'leave_review_notice_1', $content );

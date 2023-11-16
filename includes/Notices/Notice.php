@@ -77,7 +77,7 @@ class Notice {
 
 		$title             = $content['title'] ?? '';
 		$body              = $content['body'] ?? '';
-		$cta_text          = esc_html( $content['cta'] ?? __( 'Learn more', 'dcash-for-woocommerce' ) );
+		$cta_text          = esc_html( $content['cta'] ?? __( 'Learn more', 'integrate-dcash-with-woocommerce' ) );
 		$learn_more_link   = esc_attr( $content['link'] ?? '' );
 		$learm_more_output = '';
 
@@ -86,7 +86,7 @@ class Notice {
 		}
 
 		$dismiss_url  = esc_html( $this->createDismissUrl( $notice_id ) );
-		$dismiss_text = esc_html__( 'Dismiss', 'dcash-for-woocommerce' );
+		$dismiss_text = esc_html__( 'Dismiss', 'integrate-dcash-with-woocommerce' );
 		?>
 			<!-- TODO Add styles for this notice logo -->
 			<div class="update-nag dcash-wc-admin-notice" data-notice-title="<?php echo esc_attr( $title ); ?>">
@@ -112,7 +112,7 @@ class Notice {
 		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_nonce_value'] ?? '' ) );
 
 		if ( ! wp_verify_nonce( $nonce, 'dcash_wc_notice_nonce_value' ) ) {
-			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'dcash-for-woocommerce' ) );
+			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'integrate-dcash-with-woocommerce' ) );
 		}
 
 		$notice_id = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_id'] ?? '' ) );
@@ -134,7 +134,7 @@ class Notice {
 		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_nonce'] ?? '' ) );
 
 		if ( ! wp_verify_nonce( $nonce, 'dcash_wc_notice_nonce_value' ) ) {
-			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'dcash-for-woocommerce' ) );
+			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'integrate-dcash-with-woocommerce' ) );
 		}
 
 		$notice_id = $this->getNoticeID();
