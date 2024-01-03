@@ -78,8 +78,8 @@ if ( defined( 'PHP_VERSION' ) ) {
  * @since 1.0.0
  */
 
-if ( ! function_exists( 'sl_wc_active' ) ) {
-	function sl_wc_active() {
+if ( ! function_exists( 'dcash_wc_woocommerce_active' ) ) {
+	function dcash_wc_woocommerce_active() {
 		$active_plugins = (array) apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 		if ( is_multisite() ) {
 			$active_plugins = array_merge( $active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
@@ -88,7 +88,7 @@ if ( ! function_exists( 'sl_wc_active' ) ) {
 	}
 }
 
-if ( ! sl_wc_active() ) {
+if ( ! dcash_wc_woocommerce_active() ) {
 	add_action(
 		'admin_notices',
 		function () {
@@ -108,13 +108,13 @@ require dirname( __FILE__ ) . '/vendor/autoload.php';
  * The code that runs during plugin activation.
  * This action is documented in includes/class-dcash-wc-activator.php
  */
-if ( ! function_exists( 'activate_prefix' ) ) {
+if ( ! function_exists( 'dcash_wc_activate' ) ) {
 	/**
 	 * Code to run when plugin is activated.
 	 *
 	 * @return void
 	 */
-	function activate_prefix() {
+	function dcash_wc_activate() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dcash-wc-activator.php';
 		DCashWCActivator::activate();
 	}
@@ -124,20 +124,20 @@ if ( ! function_exists( 'activate_prefix' ) ) {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-dcash-wc-deactivator.php
  */
-if ( ! function_exists( 'deactivate_prefix' ) ) {
+if ( ! function_exists( 'dcash_wc_deactivate' ) ) {
 	/**
 	 * Code to run when plugin is deactivated.
 	 *
 	 * @return void
 	 */
-	function deactivate_prefix() {
+	function dcash_wc_deactivate() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-dcash-wc-deactivator.php';
 		DCashWCDeactivator::deactivate();
 	}
 }
 
-register_activation_hook( __FILE__, 'activate_prefix' );
-register_deactivation_hook( __FILE__, 'deactivate_prefix' );
+register_activation_hook( __FILE__, 'dcash_wc_activate' );
+register_deactivation_hook( __FILE__, 'dcash_wc_deactivate' );
 
 define( 'DCASH_WC_BASE_FILE', basename( plugin_dir_path( __FILE__ ) ) );
 define( 'DCASH_WC_PLUGIN_NAME', 'dcash-wc' );
