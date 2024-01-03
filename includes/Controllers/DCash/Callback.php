@@ -30,7 +30,7 @@ use WC_Action_Queue;
 class Callback {
 
 	/**
-	 * Schedule an action to when request is received from DCash gateway.
+	 * Schedule an action when request is received from DCash gateway.
 	 *
 	 * We need this to change the order status to completed when the callback response is received from the DCash API.
 	 *
