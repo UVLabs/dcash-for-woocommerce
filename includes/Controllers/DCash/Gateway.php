@@ -137,10 +137,6 @@ class Gateway extends \WC_Payment_Gateway {
 		$dcash_btn_text  = __( 'Pay with DCash', 'integrate-dcash-with-woocommerce' );
 		$callback_url    = home_url( '/', 'https' ) . 'wc-api/sl-dcash-callback-handler/';
 
-		if ( DCASH_WC_DEBUG ) {
-			$callback_url = 'https://rainbow:hungry@spiffy-book.localsite.io/wc-api/sl-dcash-callback-handler/';
-		}
-
 		if ( Functions::sandboxModeEnabled() ) {
 			$memo = __( 'This is a test transaction. Payment ID:', 'integrate-dcash-with-woocommerce' ) . ' ' . $payment_id;
 		} else {
