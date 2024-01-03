@@ -75,26 +75,22 @@ class Notice {
 			return;
 		}
 
-		$title             = $content['title'] ?? '';
-		$body              = $content['body'] ?? '';
-		$cta_text          = esc_html( $content['cta'] ?? __( 'Learn more', 'dcash-for-woocommerce' ) );
-		$learn_more_link   = esc_attr( $content['link'] ?? '' );
-		$learm_more_output = '';
+		$title           = $content['title'] ?? '';
+		$body            = $content['body'] ?? '';
+		$cta_text        = $content['cta'] ?? __( 'Learn more', 'integrate-dcash-with-woocommerce' );
+		$learn_more_link = $content['link'] ?? '';
 
-		if ( ! empty( $learn_more_link ) ) {
-			$learm_more_output = "<li id='dcash-wc-notice-cta'><a target='_blank' href='$learn_more_link' style='color: #2b4fa3'><span class='dashicons dashicons-share-alt2'></span>$cta_text</a></li>";
-		}
-
-		$dismiss_url  = esc_html( $this->createDismissUrl( $notice_id ) );
-		$dismiss_text = esc_html__( 'Dismiss', 'dcash-for-woocommerce' );
+		$dismiss_url  = $this->createDismissUrl( $notice_id );
+		$dismiss_text = __( 'Dismiss', 'integrate-dcash-with-woocommerce' );
 		?>
-			<!-- TODO Add styles for this notice logo -->
 			<div class="update-nag dcash-wc-admin-notice" data-notice-title="<?php echo esc_attr( $title ); ?>">
 			<div class="dcash-wc-notice-logo"></div> 
 			<p class="dcash-wc-notice-title"><?php echo esc_html( $title ); ?></p> 
 			<p class="dcash-wc-notice-body"><?php echo esc_html( $body ); ?></p>
 			<ul class="dcash-wc-notice-body">
-			<?php echo $learm_more_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- We already escaped the individual contents $learm_more_output above. ?>
+			<?php if ( ! empty( $learn_more_link ) ) { ?>
+				<li id='dcash-wc-notice-cta'><a target='_blank' href='<?php echo esc_url( $learn_more_link ); ?>' style='color: #2b4fa3'><span class='dashicons dashicons-share-alt2'></span><?php echo esc_html( $cta_text ); ?></a></li>
+			<?php } ?>
 			<li id="dcash-wc-notice-dismiss"><a href="<?php echo esc_attr( $dismiss_url ); ?>" style="color: #2b4fa3"> <span class="dashicons dashicons-dismiss"></span><?php echo esc_html( $dismiss_text ); ?></a></li>
 			</ul>
 			</div>
@@ -112,7 +108,7 @@ class Notice {
 		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_nonce_value'] ?? '' ) );
 
 		if ( ! wp_verify_nonce( $nonce, 'dcash_wc_notice_nonce_value' ) ) {
-			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'dcash-for-woocommerce' ) );
+			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'integrate-dcash-with-woocommerce' ) );
 		}
 
 		$notice_id = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_id'] ?? '' ) );
@@ -134,7 +130,7 @@ class Notice {
 		$nonce = sanitize_text_field( wp_unslash( $_REQUEST['dcash_wc_notice_nonce'] ?? '' ) );
 
 		if ( ! wp_verify_nonce( $nonce, 'dcash_wc_notice_nonce_value' ) ) {
-			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'dcash-for-woocommerce' ) );
+			exit( esc_html__( 'Failed to verify nonce. Please try going back and refreshing the page to try again.', 'integrate-dcash-with-woocommerce' ) );
 		}
 
 		$notice_id = $this->getNoticeID();

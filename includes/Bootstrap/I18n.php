@@ -42,7 +42,7 @@ class I18n {
 	public function loadPluginTextdomain() {
 
 		load_plugin_textdomain(
-			'dcash-for-woocommerce',
+			'integrate-dcash-with-woocommerce',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

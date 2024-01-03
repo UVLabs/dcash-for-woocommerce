@@ -28,7 +28,7 @@ use WC_Logger;
  */
 class Logger extends WC_Logger {
 
-	const CONTEXT = array( 'source' => 'dcash-for-woocommerce' );
+	const CONTEXT = array( 'source' => 'integrate-dcash-with-woocommerce' );
 
 	/**
 	 * Save a Critical log.

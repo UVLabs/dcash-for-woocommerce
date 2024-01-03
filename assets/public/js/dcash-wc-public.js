@@ -49,7 +49,7 @@
    */
   function unblockUI() {
     $(".woocommerce")
-      .addClass("processing")
+      .removeClass("processing")
       .unblock({
         message: null,
         overlayCSS: {

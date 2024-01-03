@@ -27,7 +27,7 @@ npm run build
 rsync -acvP --delete --exclude-from=".distignore" ./ "./dist"
 
 #Change to our dist folder and zip to artifact folder
-(cd dist && zip -r ../artifact-dcash/dcash-for-woocommerce.zip .)
+(cd dist && zip -r ../artifact-dcash/integrate-dcash-with-woocommerce.zip .)
 
 # Delete dist folder
 rm -rf dist
